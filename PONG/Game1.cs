@@ -8,6 +8,8 @@ namespace PONG
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        public Texture2D _kirbyBall;
+        public Vector2 _location;
 
         public Game1()
         {
@@ -19,15 +21,16 @@ namespace PONG
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            _location = new Vector2(100, 50);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            // TODO: use this.Content to load your game content here
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            _kirbyBall = Content.Load<Texture2D>("KirbyBallSprite");
         }
 
         protected override void Update(GameTime gameTime)
@@ -45,6 +48,12 @@ namespace PONG
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            _spriteBatch.Begin();
+
+            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White, 0, new Vector2(0), 0.1f, SpriteEffects.None, 0f);
+            
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
