@@ -23,12 +23,12 @@ namespace PONG
         }
 
        public void movement(x1,x2) {
-            
-       } 
+            Rectangle(x1,x2)
+       }
        
         public void Draw()
         {
-           
+           Rectangle
         }
 
 
