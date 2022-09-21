@@ -8,25 +8,26 @@ namespace PONG
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        _graphics = new GraphicsDeviceManager(this);
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            
+            
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            _
             base.Initialize();
         }
 
         protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+        {   
+            
+           _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -42,7 +43,7 @@ namespace PONG
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
