@@ -11,10 +11,8 @@ namespace PONG
     {
         
         private SpriteBatch _spriteBatch;
-        
         private GraphicsDeviceManager _graphics;
-        public Texture2D _kirbyBall;
-        public Vector2 _location;
+        public Racket player1;
 
         public Game1()
         {
@@ -28,6 +26,12 @@ namespace PONG
             // TODO: Add your initialization logic here
            
             _location = new Vector2(100, 50);
+            player1 = new Racket(50, 100);
+
+
+
+
+
             base.Initialize();
         }
 
@@ -36,8 +40,7 @@ namespace PONG
             
            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-
-            _kirbyBall = Content.Load<Texture2D>("KirbyBallSprite");
+            player1.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -52,13 +55,16 @@ namespace PONG
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
 
+            
+
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White, 0, new Vector2(0), 0.1f, SpriteEffects.None, 0f);
+            player1.Draw(_spriteBatch);
+
             
             _spriteBatch.End();
 
