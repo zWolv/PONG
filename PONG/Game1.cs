@@ -8,11 +8,11 @@ namespace PONG
     
 
     public class Game1 : Game
-    {
-        
+    {        
         private SpriteBatch _spriteBatch;
         private GraphicsDeviceManager _graphics;
         public Racket player1;
+        public Ball Kirby;
 
         public Game1()
         {
@@ -30,6 +30,8 @@ namespace PONG
             player1 = new Racket(0, 0, Keys.W, Keys.S);
             player2 = new Racket(886, 0, Keys.)
             player1.Initialize();
+            Kirby = new Ball(100, 200, 2, 0);
+            Kirby.Initialize();
             base.Initialize();
         }
 
@@ -39,6 +41,8 @@ namespace PONG
            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             player1.LoadContent(Content);
+            Kirby.LoadContent(Content);
+            _kirbyBall = Content.Load<Texture2D>("KirbyBallSprite");
         }
 
         protected override void Update(GameTime gameTime)
@@ -62,8 +66,8 @@ namespace PONG
             _spriteBatch.Begin();
 
             player1.Draw(_spriteBatch);
+            Kirby.Draw(_spriteBatch);
 
-            
             _spriteBatch.End();
 
             base.Draw(gameTime);
