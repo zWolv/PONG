@@ -12,14 +12,14 @@ namespace PONG
 {
    public class Ball
     {
-        int _x;
-        int _y;
-        int _rad;
-        public Ball(_x, _y, _rad)
+        int x;
+        int y;
+        int rad;
+        public Ball(int _x,int _y,int _rad)
         {
-            int _x      = _x;
-            int _y      = _y;
-            int _rad    = _rad;
+            x      = _x;
+            y      = _y;
+            rad    = _rad;
         }
     }
 }
