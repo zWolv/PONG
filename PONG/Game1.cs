@@ -13,9 +13,8 @@ namespace PONG
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _graphics = new GraphicsDeviceManager(this);
         }
 
         protected override void Initialize()
@@ -26,9 +25,10 @@ namespace PONG
         }
 
         protected override void LoadContent()
-        {
+        {   
+            
+           _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _kirbyBall = Content.Load<Texture2D>("KirbyBallSprite");
         }
@@ -45,7 +45,7 @@ namespace PONG
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
