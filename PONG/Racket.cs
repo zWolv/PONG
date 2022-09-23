@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.MediaFoundation;
+using System.ComponentModel.DataAnnotations;
 
 namespace PONG
 {
@@ -11,24 +13,27 @@ namespace PONG
         int y1;
         public Texture2D _sprite;
         private Vector2 _pos;
-       
+        Keys player_up;
+        Keys player_down;
         
         
 
-       public Racket(int _x1,int _y1)
+       public Racket(int _x1,int _y1, Keys _player_up, Keys _player_down)
         {
             x1 = _x1;
             y1 = _y1;
+            player_up = _player_up;
+            player_down = _player_down;
         }
 
-       public void movement(int x,int y) {
-            _pos = new Vector2(x, y);
-
-
+       public void movement() {
             KeyboardState state = Keyboard.GetState();
 
 
-            if (state.IsKeyDown(Keys.S))
+            if (state.IsKeyDown(player_up))
+            {
+                _pos.Y -= 5;
+            } else if(state.IsKeyDown(player_down))
             {
                 _pos.Y += 5;
             }
@@ -38,20 +43,18 @@ namespace PONG
 
         public void Initialize()
         {
-            
+            _pos = new Vector2(x1, y1);
         }
         
         public void LoadContent(ContentManager content)
         {
             
             _sprite = content.Load<Texture2D>("batje");
-            
-            _pos = new Vector2(30,50);
         }
 
         public void Update()
         {
-            movement(x1, y1);
+            movement();
         }
         public void Draw(SpriteBatch _spriteBatch)
         {

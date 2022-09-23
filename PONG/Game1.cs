@@ -24,14 +24,12 @@ namespace PONG
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-           
-            _location = new Vector2(100, 50);
-            player1 = new Racket(50, 100);
-
-
-
-
-
+            _graphics.PreferredBackBufferWidth = 1000;
+            _graphics.PreferredBackBufferHeight = 500;
+            _graphics.ApplyChanges();
+            player1 = new Racket(0, 0, Keys.W, Keys.S);
+            player2 = new Racket(886, 0, Keys.)
+            player1.Initialize();
             base.Initialize();
         }
 
@@ -47,7 +45,7 @@ namespace PONG
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            player1.Update();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
