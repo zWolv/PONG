@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-
-
+using System.ComponentModel.Design.Serialization;
 
 namespace PONG
 {
@@ -20,10 +18,9 @@ namespace PONG
 
         public Game1()
         {
-
+            Content.RootDirectory = "Content";
             _graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
-            _graphics = new GraphicsDeviceManager(this);
         }
 
         protected override void Initialize()
