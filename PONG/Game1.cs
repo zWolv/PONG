@@ -2,17 +2,26 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
+
+
 namespace PONG
 {
+    
+
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        
         private SpriteBatch _spriteBatch;
+        
+        private GraphicsDeviceManager _graphics;
         public Texture2D _kirbyBall;
         public Vector2 _location;
 
         public Game1()
         {
+
+            _graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
             _graphics = new GraphicsDeviceManager(this);
         }
@@ -20,6 +29,7 @@ namespace PONG
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+           
             _location = new Vector2(100, 50);
             base.Initialize();
         }
@@ -57,5 +67,16 @@ namespace PONG
 
             base.Draw(gameTime);
         }
+
+            static void  Main()
+            {
+               Game1 game = new Game1();
+               game.Run();
+            }
+
     }
+
+
+
 }
+
