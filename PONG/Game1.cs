@@ -53,6 +53,7 @@ namespace PONG
                 Exit();
             player1.Update();
             player2.Update();
+            Kirby.update();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
