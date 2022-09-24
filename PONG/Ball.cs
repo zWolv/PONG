@@ -63,7 +63,7 @@ namespace PONG
                 this.intersect = true;
             } 
         }
-        public void update()
+        public void Update()
         {
             if (intersect)
             {

@@ -14,7 +14,7 @@ namespace PONG
     {        
         private SpriteBatch _spriteBatch;
         private GraphicsDeviceManager _graphics;
-        public Ball Kirby;
+        public List<Ball> ballen = new List<Ball>();
         public List<Racket> players = new List<Racket>();
 
         
@@ -40,8 +40,11 @@ namespace PONG
             {
                 p.Initialize();
             }
-            Kirby = new Ball(700, 50, 2, 0);
-            Kirby.Initialize();
+            ballen.Add(new Ball(700, 50, 2, 0));
+            foreach(Ball b in ballen)
+            {
+                b.Initialize();
+            }
             base.Initialize();
         }
 
@@ -54,14 +57,18 @@ namespace PONG
             {
                 p.LoadContent(Content);
             }
-            Kirby.LoadContent(Content);
+            foreach(Ball b in ballen)
+            {
+                b.LoadContent(Content);
+            }
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
+            // TODO: Add your update logic here
             foreach(Racket p in players)
             {
                 p.Update(Kirby.hitbox);
@@ -72,8 +79,11 @@ namespace PONG
                 Kirby.intersectDetect(p.intersect);
             }
             
-            Kirby.update();
-            // TODO: Add your update logic here
+            foreach(Ball p in ballen)
+            {
+                p.Update();
+            }
+            
 
             base.Update(gameTime);
         }
@@ -84,15 +94,18 @@ namespace PONG
 
             // TODO: Add your drawing code here
 
-            
-
             _spriteBatch.Begin();
 
             foreach(Racket p in players)
             {
                 p.Draw(_spriteBatch);
             }
-            Kirby.Draw(_spriteBatch);
+
+            foreach(Ball b in ballen)
+            {
+                b.Draw(_spriteBatch);
+            }
+           
 
             _spriteBatch.End();
 
