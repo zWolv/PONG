@@ -26,70 +26,64 @@ namespace PONG
         public Vector2 _velocity;
         bool intersect;
 
-        public Ball(float _x, float _y, float _speedX, float _speedY)
-        {
-            x = _x;
-            y = _y;
-            speedX = _speedX;
-            speedY = _speedY;
-        }
-
-        public Rectangle hitbox
-        {
-            get
+            public Ball(float _x, float _y, float _speedX, float _speedY)
             {
-                Rectangle balBounds = _kirbyBall.Bounds;
-                balBounds.Offset(_location - spriteOrigin);
-                return balBounds;
-            }
-        }
-
-        public void Initialize()
-        {
-            _location = new Vector2(x, y);
-            _velocity = new Vector2(speedX, speedY);
-        }
-
-        public void movement()
-        {
-            update();
-        }
-
-
-        public void intersectDetect(bool intersect)
-        {
-            if(intersect)
-            {
-                this.intersect = true;
-            } 
-        }
-        public void Update()
-        {
-            if (intersect)
-            {
-                _velocity.X = _velocity.X * -1;
-                intersect = false;
+                x = _x;
+                y = _y;
+                speedX = _speedX;
+                speedY = _speedY;
             }
 
-            _location = Vector2.Add(_location, _velocity);
-
-            /*if (_location.X < 0 || _location.X > 600)
+            public Rectangle hitbox
             {
-                _velocity.X++;
-                _velocity.X = -(_velocity.X);
-            }*/
-        }
+                get
+                    {
+                        Rectangle balBounds = _kirbyBall.Bounds;
+                        balBounds.Offset(_location - spriteOrigin);
+                        return balBounds;
+                    }
+            }
 
-        public void LoadContent(ContentManager content)
-        {
-            _kirbyBall = content.Load<Texture2D>("KirbyBallSprite");
-            spriteOrigin = new Vector2(_kirbyBall.Width / 2, _kirbyBall.Height / 2);
-            _location = _location - spriteOrigin;
-        }
+            public void Initialize()
+            {
+                _location = new Vector2(x, y);
+                _velocity = new Vector2(speedX, speedY);
+            }
 
-        public void Draw(SpriteBatch _spriteBatch)
-        {
-            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
-        }
+            public void movement()
+            {
+                update();
+            }
+
+            public void intersectDetect(bool intersect)
+            {
+                if(intersect)
+                {
+                    this.intersect = true;
+                } 
+            }
+
+            public void Update()
+            {
+                if (intersect)
+                {
+                    _velocity.X = _velocity.X * -1;
+                    intersect = false;
+                }
+
+                _location = Vector2.Add(_location, _velocity);
+            }
+
+            public void LoadContent(ContentManager content)
+            {
+                _kirbyBall = content.Load<Texture2D>("KirbyBallSprite");
+                spriteOrigin = new Vector2(_kirbyBall.Width / 2, _kirbyBall.Height / 2);
+                _location = _location - spriteOrigin;
+            }
+
+            public void Draw(SpriteBatch _spriteBatch)
+            {
+                _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
+            }
     }
 }
