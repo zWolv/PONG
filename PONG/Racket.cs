@@ -79,10 +79,18 @@ namespace PONG
         public void Update(Rectangle bal)
         {
             movement();
-            if (hitbox.Intersects(bal))
-            {
-                intersect = true;
-            }
+            
+
+  
+
+                if (hitbox.Intersects(bal))
+                {
+                    intersect = true;
+                } 
+                else
+                {
+                    intersect = false;
+                }           
         }
         public void Draw(SpriteBatch _spriteBatch)
         {

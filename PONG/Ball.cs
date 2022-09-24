@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
@@ -15,17 +16,17 @@ namespace PONG
 {
     public class Ball
     {
-        int x;
-        int y;
-        int speedX;
-        int speedY;
+        float x;
+        float y;
+        float speedX;
+        float speedY;
         public Texture2D _kirbyBall;
         private Vector2 spriteOrigin;
         public Vector2 _location;
         public Vector2 _velocity;
         bool intersect;
 
-        public Ball(int _x, int _y, int _speedX, int _speedY)
+        public Ball(float _x, float _y, float _speedX, float _speedY)
         {
             x = _x;
             y = _y;
@@ -67,15 +68,16 @@ namespace PONG
             if (intersect)
             {
                 _velocity.X = _velocity.X * -1;
+                intersect = false;
             }
 
             _location = Vector2.Add(_location, _velocity);
 
-            if (_location.X < 0 || _location.X > 600)
+            /*if (_location.X < 0 || _location.X > 600)
             {
                 _velocity.X++;
                 _velocity.X = -(_velocity.X);
-            }
+            }*/
         }
 
         public void LoadContent(ContentManager content)
@@ -87,7 +89,7 @@ namespace PONG
 
         public void Draw(SpriteBatch _spriteBatch)
         {
-            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White, 0, new Vector2(0), 0.07f, SpriteEffects.None, 0f);
+            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
         }
     }
 }

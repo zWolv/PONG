@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
+using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 
 namespace PONG
@@ -14,8 +15,7 @@ namespace PONG
         private SpriteBatch _spriteBatch;
         private GraphicsDeviceManager _graphics;
         public Ball Kirby;
-        int totalPlayers = 2;
-        public Racket[] players;
+        public List<Racket> players = new List<Racket>();
 
         
 
@@ -34,13 +34,13 @@ namespace PONG
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
 
-            players[1] = new Racket(26, 57, Keys.W, Keys.S);
-            players[2] = new Racket(973, 57, Keys.Up, Keys.Down); 
-            for(int i = 0; i < totalPlayers; i++)
+            players.Add(new Racket(26, 57, Keys.W, Keys.S));
+            players.Add(new Racket(973, 57, Keys.Up, Keys.Down));
+            foreach(Racket p in players)
             {
-                players[i].Initialize();
+                p.Initialize();
             }
-            Kirby = new Ball(100, 200, 2, 0);
+            Kirby = new Ball(700, 50, 2, 0);
             Kirby.Initialize();
             base.Initialize();
         }
@@ -50,11 +50,10 @@ namespace PONG
             
            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            for(int i = 0; i < totalPlayers; i++)
+            foreach(Racket p in players)
             {
-                players[i].LoadContent(Content);
+                p.LoadContent(Content);
             }
-            Kirby = new Ball(100, 200, 2, 0);
             Kirby.LoadContent(Content);
         }
 
@@ -63,12 +62,16 @@ namespace PONG
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-             for(int i = 0; i < totalPlayers; i++)
+            foreach(Racket p in players)
             {
-                players[i].Update(Kirby.hitbox);
+                p.Update(Kirby.hitbox);
             }
-            //Kirby.intersectDetect(player1.intersect);
-            //Kirby.intersectDetect(player2.intersect);
+            
+            foreach(Racket p in players)
+            {
+                Kirby.intersectDetect(p.intersect);
+            }
+            
             Kirby.update();
             // TODO: Add your update logic here
 
@@ -85,9 +88,9 @@ namespace PONG
 
             _spriteBatch.Begin();
 
-             for(int i = 0; i < totalPlayers; i++)
+            foreach(Racket p in players)
             {
-                players[i].Draw(_spriteBatch);
+                p.Draw(_spriteBatch);
             }
             Kirby.Draw(_spriteBatch);
 
