@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.Win32;
 using System.ComponentModel.Design.Serialization;
 
 namespace PONG
@@ -14,6 +15,7 @@ namespace PONG
         public Racket player1;
         public Racket player2;
         public Ball Kirby;
+        
 
         public Game1()
         {
@@ -28,8 +30,8 @@ namespace PONG
             _graphics.PreferredBackBufferWidth = 1000;
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
-            player1 = new Racket(0, 0, Keys.W, Keys.S);
-            player2 = new Racket(947, 0, Keys.Up, Keys.Down);
+            player1 = new Racket(26, 57, Keys.W, Keys.S);
+            player2 = new Racket(973, 57, Keys.Up, Keys.Down);
             player1.Initialize();
             player2.Initialize();
             Kirby = new Ball(100, 200, 2, 0);
@@ -51,8 +53,10 @@ namespace PONG
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            player1.Update();
-            player2.Update();
+            player1.Update(Kirby.hitbox);
+            Kirby.intersectDetect(player1.intersect);
+            player2.Update(Kirby.hitbox);
+            Kirby.intersectDetect(player2.intersect);
             Kirby.update();
             // TODO: Add your update logic here
 

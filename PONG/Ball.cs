@@ -20,8 +20,10 @@ namespace PONG
         int speedX;
         int speedY;
         public Texture2D _kirbyBall;
+        private Vector2 spriteOrigin;
         public Vector2 _location;
         public Vector2 _velocity;
+        bool intersect;
 
         public Ball(int _x, int _y, int _speedX, int _speedY)
         {
@@ -29,6 +31,15 @@ namespace PONG
             y = _y;
             speedX = _speedX;
             speedY = _speedY;
+        }
+
+        public Rectangle hitbox
+        {
+            get
+            {
+                Rectangle balBounds = _kirbyBall.Bounds;
+                return balBounds;
+            }
         }
 
         public void Initialize()
@@ -42,8 +53,20 @@ namespace PONG
             update();
         }
 
+
+        public void intersectDetect(bool intersect)
+        {
+            if(intersect)
+            {
+                this.intersect = true;
+            } 
+        }
         public void update()
         {
+            if (intersect)
+            {
+                _velocity.X = _velocity.X -1;
+            }
             _location = Vector2.Add(_location, _velocity);
 
             if (_location.X < 0 || _location.X > 600)
@@ -56,6 +79,8 @@ namespace PONG
         public void LoadContent(ContentManager content)
         {
             _kirbyBall = content.Load<Texture2D>("KirbyBallSprite");
+            spriteOrigin = new Vector2(_kirbyBall.Width / 2, _kirbyBall.Height / 2);
+            _location = _location - spriteOrigin;
         }
 
         public void Draw(SpriteBatch _spriteBatch)

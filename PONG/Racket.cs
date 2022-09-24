@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.DirectWrite;
-using SharpDX.MediaFoundation;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,9 +12,12 @@ namespace PONG
         int x1;
         int y1;
         public Texture2D _sprite;
+        private Vector2 spriteOrigin;
         private Vector2 _pos;
         Keys player_up;
         Keys player_down;
+        public bool intersect;
+
         
         
 
@@ -32,7 +33,7 @@ namespace PONG
             KeyboardState state = Keyboard.GetState();
 
 
-            if(_pos.Y <= 386) { 
+            if(_pos.Y <= 383) { 
                 if(state.IsKeyDown(player_down))
                 {
                     _pos.Y += 5;
@@ -50,26 +51,41 @@ namespace PONG
             
         }
        
-
+        public Rectangle hitbox
+        {
+            get
+            {
+                Rectangle racketBounds = _sprite.Bounds;
+                racketBounds.Offset(_pos - spriteOrigin);
+                return racketBounds;
+            }
+        }
 
         public void Initialize()
         {
-            _pos = new Vector2(x1, y1);
+            
+            
         }
         
         public void LoadContent(ContentManager content)
         {
             
             _sprite = content.Load<Texture2D>("batje");
+            spriteOrigin = new Vector2(_sprite.Width / 2, _sprite.Height / 2);
+            _pos = new Vector2(x1, y1);
+            _pos = _pos - spriteOrigin;
         }
 
-        public void Update()
+        public void Update(Rectangle bal)
         {
             movement();
+            if (hitbox.Intersects(bal))
+            {
+                intersect = true;
+            }
         }
         public void Draw(SpriteBatch _spriteBatch)
         {
-            
             _spriteBatch.Draw(_sprite,_pos, Color.White);
 
         }
