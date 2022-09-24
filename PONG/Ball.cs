@@ -38,6 +38,7 @@ namespace PONG
             get
             {
                 Rectangle balBounds = _kirbyBall.Bounds;
+                balBounds.Offset(_location - spriteOrigin);
                 return balBounds;
             }
         }
@@ -65,8 +66,9 @@ namespace PONG
         {
             if (intersect)
             {
-                _velocity.X = _velocity.X -1;
+                _velocity.X = _velocity.X * -1;
             }
+
             _location = Vector2.Add(_location, _velocity);
 
             if (_location.X < 0 || _location.X > 600)
