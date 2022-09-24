@@ -49,7 +49,7 @@ namespace PONG
             if (_location.X < 0 || _location.X > 600)
             {
                 _velocity.X++;
-                _velocity.X = -(_velocity.X);
+                _velocity.X = -1 * (_velocity.X);
             }
         }
 

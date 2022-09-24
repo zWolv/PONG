@@ -12,6 +12,7 @@ namespace PONG
         private SpriteBatch _spriteBatch;
         private GraphicsDeviceManager _graphics;
         public Racket player1;
+        public Racket player2;
         public Ball Kirby;
 
         public Game1()
@@ -28,8 +29,9 @@ namespace PONG
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
             player1 = new Racket(0, 0, Keys.W, Keys.S);
-            player2 = new Racket(886, 0, Keys.)
+            player2 = new Racket(947, 0, Keys.Up, Keys.Down);
             player1.Initialize();
+            player2.Initialize();
             Kirby = new Ball(100, 200, 2, 0);
             Kirby.Initialize();
             base.Initialize();
@@ -41,8 +43,8 @@ namespace PONG
            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             player1.LoadContent(Content);
+            player2.LoadContent(Content);
             Kirby.LoadContent(Content);
-            _kirbyBall = Content.Load<Texture2D>("KirbyBallSprite");
         }
 
         protected override void Update(GameTime gameTime)
@@ -50,6 +52,7 @@ namespace PONG
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             player1.Update();
+            player2.Update();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -66,6 +69,7 @@ namespace PONG
             _spriteBatch.Begin();
 
             player1.Draw(_spriteBatch);
+            player2.Draw(_spriteBatch);
             Kirby.Draw(_spriteBatch);
 
             _spriteBatch.End();

@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.DirectWrite;
 using SharpDX.MediaFoundation;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace PONG
@@ -18,7 +20,7 @@ namespace PONG
         
         
 
-       public Racket(int _x1,int _y1, Keys _player_up, Keys _player_down)
+        public Racket(int _x1,int _y1, Keys _player_up, Keys _player_down)
         {
             x1 = _x1;
             y1 = _y1;
@@ -26,18 +28,27 @@ namespace PONG
             player_down = _player_down;
         }
 
-       public void movement() {
+        public void movement() {
             KeyboardState state = Keyboard.GetState();
 
 
-            if (state.IsKeyDown(player_up))
-            {
-                _pos.Y -= 5;
-            } else if(state.IsKeyDown(player_down))
-            {
-                _pos.Y += 5;
+            if(_pos.Y <= 386) { 
+                if(state.IsKeyDown(player_down))
+                {
+                    _pos.Y += 5;
+                }
             }
-       }
+
+            if(_pos.Y >= 1) {
+                if (state.IsKeyDown(player_up))
+                {
+                    _pos.Y -= 5;
+                } 
+
+                            
+            }
+            
+        }
        
 
 
