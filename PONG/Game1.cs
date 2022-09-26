@@ -14,6 +14,8 @@ namespace PONG
         private GraphicsDeviceManager _graphics;
         public List<Ball> ballen = new List<Ball>();
         public List<Racket> players = new List<Racket>();
+        static int playfieldHeight = 500;
+        static int playfieldWidth = 1000;    
 
         public Game1()
         {
@@ -25,13 +27,13 @@ namespace PONG
             protected override void Initialize()
             {
                 // TODO: Add your initialization logic here
-                _graphics.PreferredBackBufferWidth = 1000;
-                _graphics.PreferredBackBufferHeight = 500;
+                _graphics.PreferredBackBufferWidth = playfieldWidth;
+                _graphics.PreferredBackBufferHeight = playfieldHeight;
                 _graphics.ApplyChanges();
 
                 players.Add(new Racket(26, 57, Keys.W, Keys.S));
                 players.Add(new Racket(973, 57, Keys.Up, Keys.Down));
-                ballen.Add(new Ball(700, 50, 2, 0));
+                ballen.Add(new Ball(playfieldWidth / 2, playfieldHeight / 2, 5, 0));
                 foreach(Ball b in ballen)
                 {
                     b.Initialize();

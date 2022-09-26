@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.Intrinsics.X86;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +27,7 @@ namespace PONG
         public Vector2 _location;
         public Vector2 _velocity;
         bool intersect;
+        Random rnd = new Random();
 
             public Ball(float _x, float _y, float _speedX, float _speedY)
             {
@@ -65,8 +68,14 @@ namespace PONG
 
             public void Update()
             {
+
+                if (_location.Y < 0  || _location.Y > 500 - _kirbyBall.Height)
+            {
+                _velocity.Y = _velocity.Y * -1;
+            }
                 if (intersect)
                 {
+                    _velocity.Y = rnd.Next(-7, 7);
                     _velocity.X = _velocity.X * -1;
                     intersect = false;
                 }
