@@ -52,7 +52,7 @@ namespace PONG
 
             public void movement()
             {
-                update();
+                Update();
             }
 
             public void intersectDetect(bool intersect)
