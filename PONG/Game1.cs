@@ -31,10 +31,6 @@ namespace PONG
 
                 players.Add(new Racket(26, 57, Keys.W, Keys.S));
                 players.Add(new Racket(973, 57, Keys.Up, Keys.Down));
-                foreach(Racket p in players)
-                {
-                    p.Initialize();
-                }
                 ballen.Add(new Ball(700, 50, 2, 0));
                 foreach(Ball b in ballen)
                 {
@@ -66,14 +62,22 @@ namespace PONG
 
                 // TODO: Add your update logic here
                 foreach(Racket p in players)
-                {
-                    p.Update(Kirby.hitbox);
+                {   
+                    foreach(Ball b in ballen)
+                    {
+                        p.Update(b.hitbox);
+                    }
+                    
                 }
-            
-                foreach(Racket p in players)
+                
+                foreach(Ball b in ballen)
                 {
-                    Kirby.intersectDetect(p.intersect);
+                    foreach(Racket p in players)
+                    {
+                        b.intersectDetect(p.intersect);
+                    }
                 }
+                
             
                 foreach(Ball p in ballen)
                 {
