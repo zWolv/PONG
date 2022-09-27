@@ -5,6 +5,8 @@ using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Windows.Forms.VisualStyles;
+using System.Xml.Serialization;
 
 namespace PONG
 {
@@ -14,8 +16,8 @@ namespace PONG
         private GraphicsDeviceManager _graphics;
         public List<Ball> ballen = new List<Ball>();
         public List<Racket> players = new List<Racket>();
-        static int playfieldHeight = 500;
-        static int playfieldWidth = 1000;    
+        int canvasWidth = 1000;
+        int canvasHeight = 500;
 
         public Game1()
         {
@@ -27,13 +29,13 @@ namespace PONG
             protected override void Initialize()
             {
                 // TODO: Add your initialization logic here
-                _graphics.PreferredBackBufferWidth = playfieldWidth;
-                _graphics.PreferredBackBufferHeight = playfieldHeight;
+                _graphics.PreferredBackBufferWidth = canvasWidth;
+                _graphics.PreferredBackBufferHeight = canvasHeight;
                 _graphics.ApplyChanges();
-
-                players.Add(new Racket(26, playfieldHeight/2, Keys.W, Keys.S));
-                players.Add(new Racket(973, playfieldHeight / 2, Keys.Up, Keys.Down));
-                ballen.Add(new Ball(playfieldWidth / 2, playfieldHeight / 2, 5, 0));
+                ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
+                players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+                players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+                //players.Add(new Racket(300, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
                 foreach(Ball b in ballen)
                 {
                     b.Initialize();
@@ -69,7 +71,6 @@ namespace PONG
                     {
                         p.Update(b.hitbox);
                     }
-                    
                 }
                 
                 foreach(Ball b in ballen)
