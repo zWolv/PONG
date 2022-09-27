@@ -31,8 +31,8 @@ namespace PONG
                 _graphics.PreferredBackBufferHeight = playfieldHeight;
                 _graphics.ApplyChanges();
 
-                players.Add(new Racket(26, 57, Keys.W, Keys.S));
-                players.Add(new Racket(973, 57, Keys.Up, Keys.Down));
+                players.Add(new Racket(26, playfieldHeight/2, Keys.W, Keys.S));
+                players.Add(new Racket(973, playfieldHeight / 2, Keys.Up, Keys.Down));
                 ballen.Add(new Ball(playfieldWidth / 2, playfieldHeight / 2, 5, 0));
                 foreach(Ball b in ballen)
                 {
@@ -117,10 +117,6 @@ namespace PONG
                Game1 game = new Game1();
                game.Run();
             }
-
     }
-
-
-
 }
 
