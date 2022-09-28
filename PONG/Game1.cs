@@ -35,11 +35,7 @@ namespace PONG
                 ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
                 players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
                 players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-                //players.Add(new Racket(300, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-                foreach(Ball b in ballen)
-                {
-                    b.Initialize();
-                }
+                players.Add(new Racket(300, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
                 //Always leave this at the bottom
                 base.Initialize();
             }

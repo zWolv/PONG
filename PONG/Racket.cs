@@ -72,7 +72,7 @@ namespace PONG
                         }
                     }
 
-                    if(_pos.X <= width - width + 1) 
+                    if(_pos.X >= width - width + 1) 
                     { 
                         if(state.IsKeyDown(player_down_left))
                         {
@@ -122,7 +122,7 @@ namespace PONG
                     _spriteBatch.Draw(_sprite,_pos,Color.White);
                 } else if(richting == direction.horizontal)
                 {
-                    _spriteBatch.Draw(_sprite,_pos,null,Color.White,2,new Vector2(0),new Vector2(0),SpriteEffects.None,0f);
+                    _spriteBatch.Draw(_sprite,_pos,null,Color.White, 1.5707f, new Vector2(0),1f,SpriteEffects.None,0f);
                 }
                 
 
