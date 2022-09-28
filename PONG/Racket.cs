@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace PONG
 {
@@ -25,6 +27,10 @@ namespace PONG
         public direction richting;
         int width;
         int height;
+        bool canMoveUp = true;
+        bool canMoveDown = true;
+        bool canMoveLeft = true;
+        bool canMoveRight = true;
 
             public Racket(int _x1,int _y1, Keys _player_up_right, Keys _player_down_left, direction _richting, int _screenWidth, int _screenHeight)
             {
@@ -64,7 +70,7 @@ namespace PONG
 
                 if(richting == direction.horizontal)
                 {
-                    if(_pos.X <= width - 54)
+                    if(_pos.X <= width)
                     {
                         if(state.IsKeyDown(player_up_right)) 
                         { 
@@ -72,7 +78,7 @@ namespace PONG
                         }
                     }
 
-                    if(_pos.X >= width - width + 1) 
+                    if(_pos.X >= width - width + 114) 
                     { 
                         if(state.IsKeyDown(player_down_left))
                         {
@@ -82,7 +88,44 @@ namespace PONG
                     
                 }  
             }
-       
+            
+
+            public void internalIntersect(Racket self, Racket other)
+            {   
+
+                if(richting == Racket.direction.horizontal)
+                {
+                    if (self.hitbox.Intersects(other.hitbox)) 
+                        {
+                        if (self._pos.X > other._pos.X)
+                        {
+                            canMoveLeft = false;
+                        } 
+                        else if(self._pos.X < other._pos.X)
+                        {
+                            canMoveRight = false;
+                        }
+
+                            
+                }
+                else if(richting == Racket.direction.vertical)
+                {
+                    if (self.hitbox.Intersects(other.hitbox))
+                    {
+                        if(self._pos.X < other._pos.X)
+                        {
+                            canMoveUp = false;
+                        }
+                        else if(self._pos.X > other._pos.X)
+                        {
+                            canMoveDown = false;
+                        }
+                    }
+                }
+            }
+                    
+
+            }
             public Rectangle hitbox
             {
                 get
@@ -108,11 +151,19 @@ namespace PONG
                 if (hitbox.Intersects(bal))
                 {
                     intersect = true;
+                    canMoveUp = false;
+                    canMoveDown = false;
+                    canMoveRight = false;
+                    canMoveLeft = false;
                 } 
                 else
                 {
                     intersect = false;
-                }           
+                    canMoveUp = true;
+                    canMoveDown = true;
+                    canMoveRight = true;
+                    canMoveLeft = true;
+            }           
             }
 
             public void Draw(SpriteBatch _spriteBatch)
