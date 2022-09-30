@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct2D1;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 using System.Collections.Generic;
