@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PONG
 {
-    public class Menu
+    public class Buttons
     {
         Texture2D _sprite;
         Vector2 pos;
@@ -29,7 +29,7 @@ namespace PONG
         //}
         Game1.gameStates gameState;
 
-        public Menu(int _x1,int _y1, Game1.gameStates _gameState)
+        public Buttons(int _x1,int _y1, Game1.gameStates _gameState)
         {
             x1 = _x1;
             y1 = _y1;
