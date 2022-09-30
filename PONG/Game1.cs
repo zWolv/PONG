@@ -6,6 +6,7 @@ using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Forms.VisualStyles;
 using System.Xml.Serialization;
 
@@ -19,6 +20,8 @@ namespace PONG
         public List<Racket> players = new List<Racket>();
         int canvasWidth = 1000;
         int canvasHeight = 500;
+        Texture2D test;
+        int levens;
 
         enum gameStates
         {
@@ -44,9 +47,10 @@ namespace PONG
                 _graphics.PreferredBackBufferHeight = canvasHeight;
                 _graphics.ApplyChanges();
                 ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
-                players.Add(new Racket(26, canvasHeight / 2, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-                players.Add(new Racket(973, canvasHeight / 2, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-                //players.Add(new Racket(300, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
+                players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+                players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+                players.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            players.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
                 foreach(Ball b in ballen)
                 {
                     b.Initialize();
@@ -59,6 +63,7 @@ namespace PONG
             {   
                _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            test = Content.Load<Texture2D>("batje");
                 // TODO: use this.Content to load your game content here
                 foreach(Racket p in players)
                 {
@@ -75,14 +80,35 @@ namespace PONG
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     Exit();
 
-                // TODO: Add your update logic here
-                foreach(Racket p in players)
+                KeyboardState state = Keyboard.GetState();
+                if(state.IsKeyDown(Keys.D1))
+            {
+                levens++;
+            } else if (state.IsKeyDown(Keys.D2))
+            {
+                levens--;
+            }
+            // TODO: Add your update logic here
+            foreach (Racket self in players)
+            {
+                foreach (Racket other in players)
+                {
+                    if (self != other)
+                    {
+                        self.internalIntersect(self, other);
+                    }
+                }
+            }
+
+            foreach (Racket p in players)
                 {   
                     foreach(Ball b in ballen)
                     {
                         p.Update(b.hitbox);
                     }
                 }
+
+                
                 
                 foreach(Ball b in ballen)
                 {
@@ -130,7 +156,11 @@ namespace PONG
                 {
                     b.Draw(_spriteBatch);
                 }
-           
+
+                for(int i = 0; i < levens; i++)
+                {
+                 _spriteBatch.Draw(test, new Vector2(60 + (i * 60), 70), Color.White);
+                }
                 _spriteBatch.End();
 
                 base.Draw(gameTime);
