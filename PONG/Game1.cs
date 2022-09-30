@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct2D1;
+// SharpDX.Direct2D1;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 using System.Collections.Generic;
@@ -20,6 +20,16 @@ namespace PONG
         int canvasWidth = 1000;
         int canvasHeight = 500;
 
+        enum gameStates
+        {
+            Menu,
+            TweeSpelers,
+            VierSpelers,
+            GameOver,
+        }
+
+        gameStates currentGameState = gameStates.Menu;
+
         public Game1()
         {
             Content.RootDirectory = "Content";
@@ -34,8 +44,8 @@ namespace PONG
                 _graphics.PreferredBackBufferHeight = canvasHeight;
                 _graphics.ApplyChanges();
                 ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
-                players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-                players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+                players.Add(new Racket(26, canvasHeight / 2, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+                players.Add(new Racket(973, canvasHeight / 2, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
                 //players.Add(new Racket(300, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
                 foreach(Ball b in ballen)
                 {
@@ -93,13 +103,25 @@ namespace PONG
 
             protected override void Draw(GameTime gameTime)
             {
-                GraphicsDevice.Clear(Color.White);
+                GraphicsDevice.Clear(Color.DarkBlue);
 
-                // TODO: Add your drawing code here
+            // TODO: Add your drawing code here
+
+                switch (currentGameState)
+                {
+                    case gameStates.Menu:
+                    break;
+                    case gameStates.TweeSpelers:
+                    break;
+                    case gameStates.VierSpelers:
+                    break;
+                    case gameStates.GameOver:
+                    break;
+                }
 
                 _spriteBatch.Begin();
 
-                foreach(Racket p in players)
+                foreach (Racket p in players)
                 {
                     p.Draw(_spriteBatch);
                 }
