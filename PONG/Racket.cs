@@ -131,7 +131,10 @@ namespace PONG
                 get
                     {
                         Rectangle racketBounds = _sprite.Bounds;
-                        racketBounds.Offset(_pos - spriteOrigin);
+                        racketBounds.Offset(_pos - spriteOrigin - new Vector2((float)_sprite.Width,0));
+                        racketBounds.Height = _sprite.Width;
+                        racketBounds.Width = _sprite.Height;
+                        
                         return racketBounds;
                     }
             }

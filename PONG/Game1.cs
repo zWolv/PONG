@@ -20,10 +20,9 @@ namespace PONG
         public List<Racket> players = new List<Racket>();
         int canvasWidth = 1000;
         int canvasHeight = 500;
-        Texture2D test;
-        int levens;
+        public Menu menu;
 
-        enum gameStates
+        public enum gameStates
         {
             Menu,
             TweeSpelers,
@@ -31,7 +30,7 @@ namespace PONG
             GameOver,
         }
 
-        gameStates currentGameState = gameStates.Menu;
+        public gameStates currentGameState = gameStates.Menu;
 
         public Game1()
         {
@@ -46,15 +45,38 @@ namespace PONG
                 _graphics.PreferredBackBufferWidth = canvasWidth;
                 _graphics.PreferredBackBufferHeight = canvasHeight;
                 _graphics.ApplyChanges();
-                ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
-                players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-                players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-                players.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            players.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
-                foreach(Ball b in ballen)
-                {
-                    b.Initialize();
-                }
+                switch (currentGameState) {
+                    case gameStates.Menu:
+                        menu = new Menu(400, 250, gameStates.Menu);
+                    break;
+                    case gameStates.TweeSpelers:
+                        players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+                        players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+                        ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
+                        foreach (Ball b in ballen)
+                        {
+                            b.Initialize();
+                        }
+                    break;
+                    case gameStates.VierSpelers:
+                        players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+                        players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+                        players.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
+                        players.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
+                        ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 5, 0));
+                        foreach (Ball b in ballen)
+                        {
+                            b.Initialize();
+                        }
+                    break;
+                    case gameStates.GameOver:
+                        
+                    break;  
+                }   
+                
+                
+                
+                
                 //Always leave this at the bottom
                 base.Initialize();
             }
@@ -62,17 +84,28 @@ namespace PONG
             protected override void LoadContent()
             {   
                _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            test = Content.Load<Texture2D>("batje");
                 // TODO: use this.Content to load your game content here
-                foreach(Racket p in players)
+                switch (currentGameState)
                 {
-                    p.LoadContent(Content);
+                    case gameStates.Menu:
+                        menu.LoadContent(Content);
+                    break;
+                    case gameStates.TweeSpelers:
+                    case gameStates.VierSpelers:
+                        foreach (Racket p in players)
+                        {
+                            p.LoadContent(Content);
+                        }
+                        foreach (Ball b in ballen)
+                        {
+                            b.LoadContent(Content);
+                        }
+                    break;
+                    case gameStates.GameOver:
+
+                    break;
                 }
-                foreach(Ball b in ballen)
-                {
-                    b.LoadContent(Content);
-                }
+                
             }
 
             protected override void Update(GameTime gameTime)
@@ -80,52 +113,55 @@ namespace PONG
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     Exit();
 
-                KeyboardState state = Keyboard.GetState();
-                if(state.IsKeyDown(Keys.D1))
-            {
-                levens++;
-            } else if (state.IsKeyDown(Keys.D2))
-            {
-                levens--;
-            }
             // TODO: Add your update logic here
-            foreach (Racket self in players)
-            {
-                foreach (Racket other in players)
+                switch (currentGameState)
                 {
-                    if (self != other)
-                    {
-                        self.internalIntersect(self, other);
-                    }
-                }
-            }
+                    case gameStates.Menu:
+                        menu.Update(this);
+                    break;
+                    case gameStates.TweeSpelers:
+                    case gameStates.VierSpelers:
+                        foreach (Racket self in players)
+                        {
+                            foreach (Racket other in players)
+                            {
+                                if (self != other)
+                                {
+                                    self.internalIntersect(self, other);
+                                }
+                            }
+                        }
 
-            foreach (Racket p in players)
-                {   
-                    foreach(Ball b in ballen)
-                    {
-                        p.Update(b.hitbox);
-                    }
-                }
+                        foreach (Racket p in players)
+                        {
+                            foreach (Ball b in ballen)
+                            {
+                                p.Update(b.hitbox);
+                            }
+                        }
 
-                
-                
-                foreach(Ball b in ballen)
-                {
-                    foreach(Racket p in players)
-                    {
-                        b.intersectDetect(p.intersect);
-                    }
+
+
+                        foreach (Ball b in ballen)
+                        {
+                            foreach (Racket p in players)
+                            {
+                                b.intersectDetect(p.intersect);
+                            }
+                        }
+
+
+                        foreach (Ball p in ballen)
+                        {
+                            p.Update();
+                        }
+                    break;
+
                 }
                 
-            
-                foreach(Ball p in ballen)
-                {
-                    p.Update();
-                }
-            
                 base.Update(gameTime);
             }
+            
 
             protected override void Draw(GameTime gameTime)
             {
@@ -136,32 +172,31 @@ namespace PONG
                 switch (currentGameState)
                 {
                     case gameStates.Menu:
+                        _spriteBatch.Begin();
+                        menu.Draw(_spriteBatch);
+                        _spriteBatch.End();
                     break;
                     case gameStates.TweeSpelers:
-                    break;
                     case gameStates.VierSpelers:
+                        _spriteBatch.Begin();
+
+                        foreach (Racket p in players)
+                        {
+                            p.Draw(_spriteBatch);
+                        }
+
+                        foreach (Ball b in ballen)
+                        {
+                            b.Draw(_spriteBatch);
+                        }
+
+                        _spriteBatch.End();
                     break;
                     case gameStates.GameOver:
                     break;
                 }
 
-                _spriteBatch.Begin();
-
-                foreach (Racket p in players)
-                {
-                    p.Draw(_spriteBatch);
-                }
-
-                foreach(Ball b in ballen)
-                {
-                    b.Draw(_spriteBatch);
-                }
-
-                for(int i = 0; i < levens; i++)
-                {
-                 _spriteBatch.Draw(test, new Vector2(60 + (i * 60), 70), Color.White);
-                }
-                _spriteBatch.End();
+                
 
                 base.Draw(gameTime);
             }
