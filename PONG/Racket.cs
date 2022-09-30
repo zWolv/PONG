@@ -91,7 +91,6 @@ namespace PONG
             }
         }
 
-
         public void internalIntersect(Racket self, Racket other)
         {
 
@@ -189,7 +188,7 @@ namespace PONG
                 canMoveRight = false;
                 canMoveLeft = false;
             }
-            else
+            else if(!boundingBox.Intersects(bal))
             {
                 intersect = false;
                 canMoveUp = true;

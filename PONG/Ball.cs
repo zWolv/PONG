@@ -73,27 +73,47 @@ namespace PONG
             }
         }
 
-        public void Update()
+        public void Update(int canvasWidth, int canvasHeight)
         {
 
-            if (_location.Y < 0 || _location.Y > 500 - _kirbyBall.Height)
+            if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
             {
-                _velocity.Y = _velocity.Y * -1;
+                _velocity.Y *= -1;
             }
 
-            if (intersect)
+            if (this.intersect && _location.X < 53)
             {
-                _velocity.Y = rnd.Next(-7, 7);
-                _velocity.X = _velocity.X * -1;
+                this.intersect = false;
+                if(_velocity.X < 0 && _location.X > 27)
+                {
+                    _velocity.X *= -1;
+                    _velocity.Y = rnd.Next(-7, 7);
+                } else if (_location.X < 27)
+                {
+                    _velocity.Y *= -1;
+                }
+            }      
+            else if(this.intersect && _location.X > canvasWidth - (53 + _kirbyBall.Width))
+            {   
+                this.intersect = false;
+                if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
+                {
+                    _velocity.X *= -1;
+                    _velocity.Y = rnd.Next(-7, 7);
+                } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
+                {
+                    _velocity.Y *= -1;
+                }
             }
+                
 
-            if (_location.X < 0)
+            if (_location.X < 0 - _kirbyBall.Width)
             {
                 _location = _startLocation;
                 _velocity = _startVelocity;
                 _score2++;
             }
-            else if (_location.X > 1000 - _kirbyBall.Width)
+            else if (_location.X > 1000 + _kirbyBall.Width)
             {
                 _location = _startLocation;
                 _velocity = _startVelocity * -1;
