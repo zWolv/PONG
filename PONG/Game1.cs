@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-// SharpDX.Direct2D1;
+//using SharpDX.Direct2D1;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace PONG
 {
     public class Game1 : Game
     {        
-        private SpriteBatch _spriteBatch;
+        public SpriteBatch _spriteBatch;
         private GraphicsDeviceManager _graphics;
         public List<Ball> ballen = new List<Ball>();
         public List<Racket> players = new List<Racket>();
@@ -50,7 +50,7 @@ namespace PONG
                 players.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
                 players.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
                 players.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            players.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
+                players.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
                 foreach(Ball b in ballen)
                 {
                     b.Initialize();
@@ -61,9 +61,8 @@ namespace PONG
 
             protected override void LoadContent()
             {   
-               _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            test = Content.Load<Texture2D>("batje");
+                //scoreDisplay = Content.Load<SpriteFont>("File");
+                test = Content.Load<Texture2D>("batje");
                 // TODO: use this.Content to load your game content here
                 foreach(Racket p in players)
                 {
@@ -144,8 +143,7 @@ namespace PONG
                     case gameStates.GameOver:
                     break;
                 }
-
-                _spriteBatch.Begin();
+            _spriteBatch.Begin();
 
                 foreach (Racket p in players)
                 {

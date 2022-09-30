@@ -34,8 +34,9 @@ namespace PONG
         int _score1;
         int _score2;
         public string Scoreboard;
+        private SpriteFont scoreDisplay;
 
-            public Ball(float _x, float _y, float _speedX, float _speedY)
+        public Ball(float _x, float _y, float _speedX, float _speedY)
             {
                 x = _x;
                 y = _y;
@@ -111,11 +112,13 @@ namespace PONG
                 _kirbyBall = content.Load<Texture2D>("KirbyBallSprite");
                 spriteOrigin = new Vector2(_kirbyBall.Width / 2, _kirbyBall.Height / 2);
                 _location = _location - spriteOrigin;
-            }
+                scoreDisplay = content.Load<SpriteFont>("File");
+        }
 
             public void Draw(SpriteBatch _spriteBatch)
             {
-                _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
+            _spriteBatch.DrawString(scoreDisplay, "Score" + _score1, new Vector2(100, 100), Color.Black);
+            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
             }
     }
 }
