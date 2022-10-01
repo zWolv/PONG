@@ -20,7 +20,7 @@ namespace PONG
         Keys player_down_left;
         public Rectangle hitbox;
         public bool intersect;
-        public enum direction
+       public enum direction
         {
             horizontal,
             vertical
@@ -90,7 +90,6 @@ namespace PONG
 
             }
         }
-
 
         public void internalIntersect(Racket self, Racket other)
         {
@@ -166,7 +165,7 @@ namespace PONG
 
         public void Draw(SpriteBatch _spriteBatch)
         {
-            _spriteBatch.Draw(rectTexture, _pos, null, Color.Red);
+            //_spriteBatch.Draw(rectTexture, _pos, null, Color.Red);
             if (richting == direction.vertical)
             {
                 _spriteBatch.Draw(_sprite, _pos, Color.White);
@@ -189,7 +188,7 @@ namespace PONG
                 canMoveRight = false;
                 canMoveLeft = false;
             }
-            else
+            else if(!boundingBox.Intersects(bal))
             {
                 intersect = false;
                 canMoveUp = true;

@@ -31,12 +31,8 @@ namespace PONG
         public Vector2 _startVelocity;
         bool intersect;
         Random rnd = new Random();
-        int _score1;
-        int _score2;
-        public string Scoreboard;
-        private SpriteFont scoreDisplay;
 
-        public Ball(float _x, float _y, float _speedX, float _speedY)
+        public Ball(int _x, int _y, float _speedX, float _speedY)
             {
                 x = _x;
                 y = _y;
@@ -61,8 +57,6 @@ namespace PONG
             _startLocation = new Vector2(x, y);
             _velocity = new Vector2(speedX, speedY);
             _startVelocity = new Vector2(speedX, speedY);
-            _score1 = 0;
-            _score2 = 0;
         }
 
         public void intersectDetect(bool intersect)
@@ -73,31 +67,51 @@ namespace PONG
             }
         }
 
-        public void Update()
+        public void Update(int canvasWidth, int canvasHeight)
         {
 
-            if (_location.Y < 0 || _location.Y > 500 - _kirbyBall.Height)
+            if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
             {
-                _velocity.Y = _velocity.Y * -1;
+                _velocity.Y *= -1;
             }
 
-            if (intersect)
+            if (this.intersect && _location.X < 53)
             {
-                _velocity.Y = rnd.Next(-7, 7);
-                _velocity.X = _velocity.X * -1;
+                this.intersect = false;
+                if(_velocity.X < 0 && _location.X > 27)
+                {
+                    _velocity.X *= -1;
+                    _velocity.Y = rnd.Next(-7, 7);
+                } else if (_location.X < 27)
+                {
+                    _velocity.Y *= -1;
+                }
+            }      
+            else if(this.intersect && _location.X > canvasWidth - (53 + _kirbyBall.Width))
+            {   
+                this.intersect = false;
+                if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
+                {
+                    _velocity.X *= -1;
+                    _velocity.Y = rnd.Next(-7, 7);
+                } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
+                {
+                    _velocity.Y *= -1;
+                }
             }
+                
 
-            if (_location.X < 0)
+            if (_location.X < 0 - _kirbyBall.Width)
             {
                 _location = _startLocation;
                 _velocity = _startVelocity;
-                _score2++;
+                //_score2++;
             }
-            else if (_location.X > 1000 - _kirbyBall.Width)
+            else if (_location.X > 1000 + _kirbyBall.Width)
             {
                 _location = _startLocation;
                 _velocity = _startVelocity * -1;
-                _score1++;
+                //_score1++;
             }
 
             _location = Vector2.Add(_location, _velocity);
@@ -108,13 +122,12 @@ namespace PONG
                 _kirbyBall = content.Load<Texture2D>("KirbyBallSprite");
                 spriteOrigin = new Vector2(_kirbyBall.Width / 2, _kirbyBall.Height / 2);
                 _location = _location - spriteOrigin;
-                scoreDisplay = content.Load<SpriteFont>("File");
         }
 
             public void Draw(SpriteBatch _spriteBatch)
             {
-            _spriteBatch.DrawString(scoreDisplay, "Score" + _score1, new Vector2(100, 100), Color.Black);
-            _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
+                //_spriteBatch.DrawString(scoreDisplay, "Score " + _score1, new Vector2(Game1.canvasWidth / 10, Game1.canvasHeight / 10), Color.Black);
+                _spriteBatch.Draw(_kirbyBall, _location, null, Color.White);
             }
     }
 }
