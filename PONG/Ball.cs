@@ -23,6 +23,7 @@ namespace PONG
         Random rnd = new Random();
         public string Scoreboard;
         public bool tweeRackets = true;
+        Vector2 oldVelocity;
 
         public Ball(float _x, float _y, float _speedX, float _speedY)
         {
@@ -67,7 +68,7 @@ namespace PONG
                 if (_velocity.Y < 0 && _location.Y > 27)
                 {
                     _velocity.Y *= -1;
-                    _velocity.X = rnd.Next(-7, 7);
+                    _velocity.X = rnd.Next(-2,2);
                 }
                 else if (_location.Y < 27)
                 {
@@ -80,7 +81,7 @@ namespace PONG
                 if (_velocity.Y > 0 && _location.Y < canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
                     _velocity.Y *= -1;
-                    _velocity.X = rnd.Next(-7, 7);
+                    _velocity.X = rnd.Next(-2,2);
                 }
                 else if (_location.Y > canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
@@ -108,7 +109,7 @@ namespace PONG
                 if(_velocity.X < 0 && _location.X > 27)
                 {
                     _velocity.X *= -1;
-                    _velocity.Y = rnd.Next(-7, 7);
+                    _velocity.Y = rnd.Next(-2,2);
                 } else if (_location.X < 27)
                 {
                     _velocity.Y *= -1;
@@ -121,7 +122,7 @@ namespace PONG
                 if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.X *= -1;
-                    _velocity.Y = rnd.Next(-7, 7);
+                    _velocity.Y = rnd.Next(-2,2);
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;

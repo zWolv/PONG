@@ -57,10 +57,10 @@ namespace PONG
 
             vierPlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            vierPlayers.Add(new Racket(500, 57, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 503, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
 
-            ballen.Add(new Ball(559, canvasHeight / 2, 2, 0));
+            ballen.Add(new Ball(400, canvasHeight / 2, 0, -1));
 
             score.Add(new Text(100, canvasHeight / 2));
             score.Add(new Text(canvasWidth - 100, canvasHeight / 2));
@@ -116,10 +116,6 @@ namespace PONG
                         vierSpelers.Update(this);
                     break;
                 case gameStates.TweeSpelers:
-                    foreach (Racket p in tweePlayers)
-                    {
-                        p.Update();
-                    }
 
                     foreach (Racket p in tweePlayers)
                     {
@@ -138,6 +134,11 @@ namespace PONG
                         }
                     }
 
+                    foreach (Racket p in tweePlayers)
+                    {
+                        p.Update();
+                    }
+
                     foreach (Ball b in ballen)
                     {
                         foreach (Racket p in tweePlayers)
@@ -154,10 +155,7 @@ namespace PONG
                     break;
                 case gameStates.VierSpelers:
 
-                    foreach (Racket p in vierPlayers)
-                    {
-                        p.Update();
-                    }
+                    
 
                     //foreach (Racket self in vierPlayers)
                     //{
@@ -187,6 +185,10 @@ namespace PONG
                         }
                     }
 
+                    foreach (Racket p in vierPlayers)
+                    {
+                        p.Update();
+                    }
 
                     foreach (Ball b in ballen)
                     {

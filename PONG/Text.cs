@@ -25,7 +25,7 @@ namespace PONG
 
         public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who, int listItem, Game1 game)
         {
-            if (bal._location.X < 0 && listItem == 1)
+            if (bal._location.X < -1 * bal._kirbyBall.Width && listItem == 1)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
@@ -47,10 +47,10 @@ namespace PONG
                 score++;
             }   
 
-            if(score == 5)
-            {
-                game.currentGameState = Game1.gameStates.GameOver;
-            }
+            //if(score == 5)
+            //{
+            //    game.currentGameState = Game1.gameStates.GameOver;
+            //}
         }
 
         public void Reset()

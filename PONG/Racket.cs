@@ -138,7 +138,7 @@ namespace PONG
             get
             {
                 hitbox = _sprite.Bounds;
-                hitbox.Offset(_pos - new Vector2((float)_sprite.Width, 0));
+                hitbox.Offset(_pos - new Vector2((float)_sprite.Height, 5));
                 hitbox.Height = _sprite.Width;
                 hitbox.Width = _sprite.Height;
                 return hitbox;
@@ -195,7 +195,8 @@ namespace PONG
                 canMoveRight = false;
                 canMoveLeft = false;
             }
-            else if(boundingBoxVertical.Intersects(bal) && richting == direction.vertical) {
+            else if(boundingBoxVertical.Intersects(bal) && richting == direction.vertical) 
+            {
                 intersect = true;
                 canMoveUp = false;
                 canMoveDown = false;
