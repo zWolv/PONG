@@ -1,16 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-// SharpDX.Direct2D1;
-using SharpDX.MediaFoundation;
-using SharpDX.Win32;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.DirectoryServices.ActiveDirectory;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Serialization;
-
 namespace PONG
 {
     public class Game1 : Game
@@ -55,17 +46,17 @@ namespace PONG
             _graphics.PreferredBackBufferHeight = canvasHeight;
             _graphics.ApplyChanges();
 
-            tweeSpelers = new Buttons(400, 250, gameStates.TweeSpelers);
-            vierSpelers = new Buttons(200, 250, gameStates.VierSpelers);
+            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Twee Spelers");
+            vierSpelers = new Buttons(335, 210, gameStates.VierSpelers, "Vier Spelers");
             tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
 
             vierPlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            vierPlayers.Add(new Racket(500, 503, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
 
-            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, -3, 0));
+            ballen.Add(new Ball(559, canvasHeight / 2, 0, 0.1f));
 
             score.Add(new Text(100, canvasHeight / 2));
             score.Add(new Text(canvasWidth - 100, canvasHeight / 2));
@@ -103,13 +94,6 @@ namespace PONG
             foreach(Text num in score)
             {
                 num.LoadContent(Content);
-            }
-
-            for (int i = 2; i < 4; i++)
-            {
-                vierPlayers[i].hitbox.Width = vierPlayers[i]._sprite.Height;
-                vierPlayers[i].hitbox.Height = vierPlayers[i]._sprite.Width;
-                vierPlayers[i].hitbox.Offset(vierPlayers[i]._pos - vierPlayers[i].spriteOrigin - new Vector2((float)vierPlayers[i]._sprite.Width, 0));
             }
         }
 

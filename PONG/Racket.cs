@@ -2,11 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
-
 namespace PONG
 {
     public class Racket
@@ -128,12 +123,24 @@ namespace PONG
 
         }
 
-        public Rectangle boundingBox
+        public Rectangle boundingBoxVertical
         {
             get
             {
                 hitbox = _sprite.Bounds;
                 hitbox.Offset(_pos);
+                return hitbox;
+            }
+        }
+
+        public Rectangle boundingBoxHorizontal
+        {
+            get
+            {
+                hitbox = _sprite.Bounds;
+                hitbox.Offset(_pos - new Vector2((float)_sprite.Width, 0));
+                hitbox.Height = _sprite.Width;
+                hitbox.Width = _sprite.Height;
                 return hitbox;
             }
         }
@@ -180,7 +187,7 @@ namespace PONG
 
         public void intersectDetection(Rectangle bal)
         {
-            if (boundingBox.Intersects(bal))
+            if (boundingBoxHorizontal.Intersects(bal) && richting == direction.horizontal)
             {
                 intersect = true;
                 canMoveUp = false;
@@ -188,7 +195,14 @@ namespace PONG
                 canMoveRight = false;
                 canMoveLeft = false;
             }
-            else if(!boundingBox.Intersects(bal))
+            else if(boundingBoxVertical.Intersects(bal) && richting == direction.vertical) {
+                intersect = true;
+                canMoveUp = false;
+                canMoveDown = false;
+                canMoveRight = false;
+                canMoveLeft = false;
+            }
+            else if(!boundingBoxVertical.Intersects(bal) && !boundingBoxHorizontal.Intersects(bal))
             {
                 intersect = false;
                 canMoveUp = true;
