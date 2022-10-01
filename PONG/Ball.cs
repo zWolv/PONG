@@ -34,7 +34,7 @@ namespace PONG
         int _score1;
         int _score2;
         public string Scoreboard;
-
+        bool tweeRackets = true;
 
         public Ball(float _x, float _y, float _speedX, float _speedY)
         {
@@ -73,12 +73,47 @@ namespace PONG
             }
         }
 
-        public void Update(int canvasWidth, int canvasHeight)
+        public void vierSpelers(int canvasWidth, int canvasHeight)
         {
-
-            if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
+            if (this.intersect && _location.Y < 53)
             {
-                _velocity.Y *= -1;
+                this.intersect = false;
+                if (_velocity.Y < 0 && _location.Y > 27)
+                {
+                    _velocity.Y *= -1;
+                    _velocity.X = rnd.Next(-7, 7);
+                }
+                else if (_location.Y < 27)
+                {
+                    _velocity.X *= -1;
+                }
+            }
+            else if (this.intersect && _location.Y > canvasHeight - (53 + _kirbyBall.Height))
+            {
+                this.intersect = false;
+                if (_velocity.Y > 0 && _location.Y < canvasHeight - (53 + (_kirbyBall.Height / 2)))
+                {
+                    _velocity.Y *= -1;
+                    _velocity.X = rnd.Next(-7, 7);
+                }
+                else if (_location.Y > canvasHeight - (53 + (_kirbyBall.Height / 2)))
+                {
+                    _velocity.X *= -1;
+                }
+            }
+
+            tweeRackets = false;
+            tweeSpelers(canvasWidth, canvasHeight);
+        }
+
+        public void tweeSpelers(int canvasWidth, int canvasHeight)
+        {
+            if(tweeRackets)
+            {
+                if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
+                {
+                    _velocity.Y *= -1;
+                }
             }
 
             if (this.intersect && _location.X < 53)
@@ -93,6 +128,7 @@ namespace PONG
                     _velocity.Y *= -1;
                 }
             }      
+
             else if(this.intersect && _location.X > canvasWidth - (53 + _kirbyBall.Width))
             {   
                 this.intersect = false;
@@ -105,7 +141,7 @@ namespace PONG
                     _velocity.Y *= -1;
                 }
             }
-                
+
 
             if (_location.X < 0 - _kirbyBall.Width)
             {
@@ -119,7 +155,6 @@ namespace PONG
                 _velocity = _startVelocity * -1;
                 _score1++;
             }
-
             _location = Vector2.Add(_location, _velocity);
         }
 

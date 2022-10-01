@@ -26,6 +26,7 @@ namespace PONG
         int canvasWidth = 1000;
         int canvasHeight = 500;
         public Buttons tweeSpelers;
+        public Buttons vierSpelers;
 
         public enum gameStates
         {
@@ -54,6 +55,7 @@ namespace PONG
             _graphics.ApplyChanges();
 
             tweeSpelers = new Buttons(400, 250, gameStates.TweeSpelers);
+            vierSpelers = new Buttons(200, 250, gameStates.VierSpelers);
             tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
 
@@ -61,7 +63,7 @@ namespace PONG
             vierPlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 1, 1));
+            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 2, 0));
             foreach (Ball b in ballen)
             {
                 b.Initialize();
@@ -74,29 +76,30 @@ namespace PONG
             protected override void LoadContent()
             {   
                _spriteBatch = new SpriteBatch(GraphicsDevice);
-                // TODO: use this.Content to load your game content here
-                
-                        tweeSpelers.LoadContent(Content);
-                        foreach (Racket p in tweePlayers)
-                        {
-                            p.LoadContent(Content, GraphicsDevice);
-                        }
-                        foreach (Ball b in ballen)
-                        {
-                            b.LoadContent(Content);
-                        }
-                        foreach(Racket p in vierPlayers)
-                        {
-                            p.LoadContent(Content, GraphicsDevice);
-                        }
+            // TODO: use this.Content to load your game content here
 
-                //for (int i = 2; i < 4; i++)
-                //{
-                //    vierPlayers[i].hitbox.Width = vierPlayers[i]._sprite.Height;
-                //    vierPlayers[i].hitbox.Height = vierPlayers[i]._sprite.Width;
-                //    vierPlayers[i].hitbox.Offset(vierPlayers[i]._pos - vierPlayers[i].spriteOrigin - new Vector2((float)vierPlayers[i]._sprite.Width, 0));
-                //}
+            tweeSpelers.LoadContent(Content);
+            vierSpelers.LoadContent(Content);
+            foreach (Racket p in tweePlayers)
+            {
+                p.LoadContent(Content, GraphicsDevice);
             }
+            foreach (Ball b in ballen)
+            {
+                b.LoadContent(Content);
+            }
+            foreach (Racket p in vierPlayers)
+            {
+                p.LoadContent(Content, GraphicsDevice);
+            }
+
+            for (int i = 2; i < 4; i++)
+            {
+                vierPlayers[i].hitbox.Width = vierPlayers[i]._sprite.Height;
+                vierPlayers[i].hitbox.Height = vierPlayers[i]._sprite.Width;
+                vierPlayers[i].hitbox.Offset(vierPlayers[i]._pos - vierPlayers[i].spriteOrigin - new Vector2((float)vierPlayers[i]._sprite.Width, 0));
+            }
+        }
 
             protected override void Update(GameTime gameTime)
             {
@@ -108,6 +111,7 @@ namespace PONG
                 {
                     case gameStates.Menu:
                         tweeSpelers.Update(this);
+                        vierSpelers.Update(this);
                     break;
                     case gameStates.TweeSpelers:
                         foreach (Racket p in tweePlayers)
@@ -136,7 +140,7 @@ namespace PONG
                         {   
                             foreach(Racket p in tweePlayers)
                             {
-                                b.Update(canvasWidth, canvasHeight);
+                                b.tweeSpelers(canvasWidth, canvasHeight);
                             }
                             
                         }
@@ -144,18 +148,24 @@ namespace PONG
                         
                     break;
                 case gameStates.VierSpelers:
-                        foreach (Racket self in vierPlayers)
-                        {
-                            foreach (Racket other in vierPlayers)
-                            {
-                                if (self != other)
-                                {
-                                    self.internalIntersect(self, other);
-                                }
-                            }
-                        }
 
-                        foreach (Racket p in vierPlayers)
+                    foreach (Racket p in vierPlayers)
+                    {
+                        p.Update();
+                    }
+
+                    //foreach (Racket self in vierPlayers)
+                    //{
+                    //    foreach (Racket other in vierPlayers)
+                    //    {
+                    //        if (self != other)
+                    //        {
+                    //            self.internalIntersect(self, other);
+                    //        }
+                    //    }
+                    //}
+
+                    foreach (Racket p in vierPlayers)
                         {
                             foreach (Ball b in ballen)
                             {
@@ -177,7 +187,7 @@ namespace PONG
                         {   
                             foreach(Racket p in vierPlayers)
                             {
-                                b.Update(canvasWidth, canvasHeight);
+                                b.vierSpelers(canvasWidth, canvasHeight);
                             }
                                 
                         }
@@ -199,6 +209,7 @@ namespace PONG
                 {
                     case gameStates.Menu:
                         _spriteBatch.Begin();
+                        vierSpelers.Draw(_spriteBatch);
                         tweeSpelers.Draw(_spriteBatch);
                         _spriteBatch.End();
                     break;
