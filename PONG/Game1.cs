@@ -198,14 +198,19 @@ namespace PONG
                     }
 
 
-                        foreach (Ball b in ballen)
-                        {   
-                            foreach(Racket p in vierPlayers)
-                            {
-                                b.vierSpelers(canvasWidth, canvasHeight);
-                            }
-                                
+                    foreach (Ball b in ballen)
+                    {
+                        foreach (Racket p in vierPlayers)
+                        {
+                            b.vierSpelers(canvasWidth, canvasHeight);
                         }
+
+                    }
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, vierPlayers[i], i);
+                    }
                     break;
 
             }

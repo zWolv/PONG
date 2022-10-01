@@ -42,12 +42,12 @@ namespace PONG
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
                 score++;
-            } else if (bal._location.Y > canvasHeight && !bal.tweeRackets)
+            } else if (bal._location.Y > canvasHeight && !bal.tweeRackets && listItem == 2)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
                 score++;
-            } else if (bal._location.Y < 0 && !bal.tweeRackets)
+            } else if (bal._location.Y < 0 && !bal.tweeRackets && listItem == 3)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
