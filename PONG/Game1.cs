@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct3D9;
 using System.Collections.Generic;
 namespace PONG
 {
@@ -18,7 +19,9 @@ namespace PONG
         static int canvasHeight = 500;
         public Buttons tweeSpelers;
         public Buttons vierSpelers;
+        public Buttons gameOver;
         public List<Text> score = new List<Text>();
+        Texture2D rect;
 
         public enum gameStates
         {
@@ -48,6 +51,7 @@ namespace PONG
 
             tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Twee Spelers");
             vierSpelers = new Buttons(335, 210, gameStates.VierSpelers, "Vier Spelers");
+            gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
 
@@ -56,7 +60,7 @@ namespace PONG
             vierPlayers.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 503, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
 
-            ballen.Add(new Ball(559, canvasHeight / 2, 0, 0.1f));
+            ballen.Add(new Ball(559, canvasHeight / 2, 2, 0));
 
             score.Add(new Text(100, canvasHeight / 2));
             score.Add(new Text(canvasWidth - 100, canvasHeight / 2));
@@ -72,13 +76,15 @@ namespace PONG
             base.Initialize();
         }
 
-            protected override void LoadContent()
-            {   
-               _spriteBatch = new SpriteBatch(GraphicsDevice);
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
 
+            rect = new Texture2D(GraphicsDevice, canvasWidth, canvasHeight);
             tweeSpelers.LoadContent(Content);
             vierSpelers.LoadContent(Content);
+            gameOver.LoadContent(Content);
             foreach (Racket p in tweePlayers)
             {
                 p.LoadContent(Content, GraphicsDevice);
@@ -91,7 +97,7 @@ namespace PONG
             {
                 p.LoadContent(Content, GraphicsDevice);
             }
-            foreach(Text num in score)
+            foreach (Text num in score)
             {
                 num.LoadContent(Content);
             }
@@ -143,7 +149,7 @@ namespace PONG
 
                     for(int i = 0;i < 2; i++)
                     {
-                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i], i);
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i], i, this);
                     }
                     break;
                 case gameStates.VierSpelers:
@@ -193,9 +199,16 @@ namespace PONG
 
                     for (int i = 0; i < 4; i++)
                     {
-                        score[i].Update(ballen[0], canvasWidth, canvasHeight, vierPlayers[i], i);
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, vierPlayers[i], i, this);
                     }
                     break;
+                case gameStates.GameOver:
+                    gameOver.Update(this);
+                    for(int i = 0; i < 4;i++)
+                    {
+                        score[i].Reset();
+                    }
+                break;
 
             }
 
@@ -263,6 +276,11 @@ namespace PONG
                     
                     break;
                 case gameStates.GameOver:
+                    
+                    _spriteBatch.Begin();
+                    _spriteBatch.Draw(rect, new Vector2(0), Color.DarkBlue);
+                    gameOver.Draw(_spriteBatch);
+                    _spriteBatch.End();
                     break;
             }
 

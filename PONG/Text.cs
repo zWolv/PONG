@@ -23,7 +23,7 @@ namespace PONG
             scoreDisplay = content.Load<SpriteFont>("Score");
         }
 
-        public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who, int listItem)
+        public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who, int listItem, Game1 game)
         {
             if (bal._location.X < 0 && listItem == 1)
             {
@@ -45,11 +45,17 @@ namespace PONG
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
                 score++;
+            }   
+
+            if(score == 5)
+            {
+                game.currentGameState = Game1.gameStates.GameOver;
             }
-                
+        }
 
-               
-
+        public void Reset()
+        {
+            score = 0;
         }
 
         public void Draw(SpriteBatch _spriteBatch)
