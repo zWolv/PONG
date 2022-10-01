@@ -26,6 +26,7 @@ namespace PONG
         static int canvasWidth = 1000;
         static int canvasHeight = 500;
         public Buttons tweeSpelers;
+        public Buttons vierSpelers;
         public List<Text> score = new List<Text>();
 
         public enum gameStates
@@ -55,6 +56,7 @@ namespace PONG
             _graphics.ApplyChanges();
 
             tweeSpelers = new Buttons(400, 250, gameStates.TweeSpelers);
+            vierSpelers = new Buttons(200, 250, gameStates.VierSpelers);
             tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
 
@@ -76,12 +78,13 @@ namespace PONG
             base.Initialize();
         }
 
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            protected override void LoadContent()
+            {   
+               _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
 
             tweeSpelers.LoadContent(Content);
+            vierSpelers.LoadContent(Content);
             foreach (Racket p in tweePlayers)
             {
                 p.LoadContent(Content, GraphicsDevice);
@@ -95,12 +98,12 @@ namespace PONG
                 p.LoadContent(Content, GraphicsDevice);
             }
 
-            //for (int i = 2; i < 4; i++)
-            //{
-            //    vierPlayers[i].hitbox.Width = vierPlayers[i]._sprite.Height;
-            //    vierPlayers[i].hitbox.Height = vierPlayers[i]._sprite.Width;
-            //    vierPlayers[i].hitbox.Offset(vierPlayers[i]._pos - vierPlayers[i].spriteOrigin - new Vector2((float)vierPlayers[i]._sprite.Width, 0));
-            //}
+            for (int i = 2; i < 4; i++)
+            {
+                vierPlayers[i].hitbox.Width = vierPlayers[i]._sprite.Height;
+                vierPlayers[i].hitbox.Height = vierPlayers[i]._sprite.Width;
+                vierPlayers[i].hitbox.Offset(vierPlayers[i]._pos - vierPlayers[i].spriteOrigin - new Vector2((float)vierPlayers[i]._sprite.Width, 0));
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,10 +112,11 @@ namespace PONG
                 Exit();
 
             // TODO: Add your update logic here
-            switch (currentGameState)
-            {
-                case gameStates.Menu:
-                    tweeSpelers.Update(this);
+                switch (currentGameState)
+                {
+                    case gameStates.Menu:
+                        tweeSpelers.Update(this);
+                        vierSpelers.Update(this);
                     break;
                 case gameStates.TweeSpelers:
                     foreach (Racket p in tweePlayers)
@@ -137,36 +141,42 @@ namespace PONG
                         }
                     }
 
-                    foreach (Ball b in ballen)
-                    {
-                        foreach (Racket p in tweePlayers)
-                        {
-                            b.Update(canvasWidth, canvasHeight);
+                        foreach (Ball b in ballen)
+                        {   
+                            foreach(Racket p in tweePlayers)
+                            {
+                                b.tweeSpelers(canvasWidth, canvasHeight);
+                            }
+                            
                         }
-
-                    }
 
 
                     break;
                 case gameStates.VierSpelers:
-                    foreach (Racket self in vierPlayers)
-                    {
-                        foreach (Racket other in vierPlayers)
-                        {
-                            if (self != other)
-                            {
-                                self.internalIntersect(self, other);
-                            }
-                        }
-                    }
 
                     foreach (Racket p in vierPlayers)
                     {
-                        foreach (Ball b in ballen)
-                        {
-                            p.intersectDetection(b.hitbox);
-                        }
+                        p.Update();
                     }
+
+                    //foreach (Racket self in vierPlayers)
+                    //{
+                    //    foreach (Racket other in vierPlayers)
+                    //    {
+                    //        if (self != other)
+                    //        {
+                    //            self.internalIntersect(self, other);
+                    //        }
+                    //    }
+                    //}
+
+                    foreach (Racket p in vierPlayers)
+                        {
+                            foreach (Ball b in ballen)
+                            {
+                                p.intersectDetection(b.hitbox);
+                            }
+                        }
 
 
                     foreach (Ball b in ballen)
@@ -178,14 +188,14 @@ namespace PONG
                     }
 
 
-                    foreach (Ball b in ballen)
-                    {
-                        foreach (Racket p in vierPlayers)
-                        {
-                            b.Update(canvasWidth, canvasHeight);
+                        foreach (Ball b in ballen)
+                        {   
+                            foreach(Racket p in vierPlayers)
+                            {
+                                b.vierSpelers(canvasWidth, canvasHeight);
+                            }
+                                
                         }
-
-                    }
                     break;
 
             }
@@ -200,12 +210,13 @@ namespace PONG
 
             // TODO: Add your drawing code here
 
-            switch (currentGameState)
-            {
-                case gameStates.Menu:
-                    _spriteBatch.Begin();
-                    tweeSpelers.Draw(_spriteBatch);
-                    _spriteBatch.End();
+                switch (currentGameState)
+                {
+                    case gameStates.Menu:
+                        _spriteBatch.Begin();
+                        vierSpelers.Draw(_spriteBatch);
+                        tweeSpelers.Draw(_spriteBatch);
+                        _spriteBatch.End();
                     break;
                 case gameStates.TweeSpelers:
                     _spriteBatch.Begin();
