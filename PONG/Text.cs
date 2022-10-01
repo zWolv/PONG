@@ -30,15 +30,14 @@ namespace PONG
             scoreDisplay = content.Load<SpriteFont>("Score");
         }
 
-        public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who)
+        public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who, int listItem)
         {
-            bal.scoreUpdate = true;
-            if (bal._location.X < 0)
+            if (bal._location.X < 0 && listItem == 1)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
                 score++;
-            } else if (bal._location.X > canvasWidth)
+            } else if (bal._location.X > canvasWidth && listItem == 0)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;

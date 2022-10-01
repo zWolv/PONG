@@ -65,7 +65,7 @@ namespace PONG
             vierPlayers.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
 
-            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 3, 0));
+            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, -3, 0));
 
             score.Add(new Text(100, canvasHeight / 2));
             score.Add(new Text(canvasWidth - 100, canvasHeight / 2));
@@ -159,7 +159,7 @@ namespace PONG
 
                     for(int i = 0;i < 2; i++)
                     {
-                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i]);
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i], i);
                     }
                     break;
                 case gameStates.VierSpelers:

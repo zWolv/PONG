@@ -35,7 +35,6 @@ namespace PONG
         int _score2;
         public string Scoreboard;
         public bool tweeRackets = true;
-        public bool scoreUpdate = false;
 
         public Ball(float _x, float _y, float _speedX, float _speedY)
         {
