@@ -34,7 +34,8 @@ namespace PONG
         int _score1;
         int _score2;
         public string Scoreboard;
-        bool tweeRackets = true;
+        public bool tweeRackets = true;
+        public bool scoreUpdate = false;
 
         public Ball(float _x, float _y, float _speedX, float _speedY)
         {
@@ -141,18 +142,18 @@ namespace PONG
             }
 
 
-            if (_location.X < 0 - _kirbyBall.Width)
-            {
-                _location = _startLocation;
-                _velocity = _startVelocity;
-                //_score2++;
-            }
-            else if (_location.X > 1000 + _kirbyBall.Width)
-            {
-                _location = _startLocation;
-                _velocity = _startVelocity * -1;
-                //_score1++;
-            }
+            //if (_location.X < 0 - _kirbyBall.Width)
+            //{
+            //    _location = _startLocation;
+            //    _velocity = _startVelocity;
+            //    //_score2++;
+            //}
+            //else if (_location.X > 1000 + _kirbyBall.Width)
+            //{
+            //    _location = _startLocation;
+            //    _velocity = _startVelocity * -1;
+            //    //_score1++;
+            //}
             _location = Vector2.Add(_location, _velocity);
         }
 

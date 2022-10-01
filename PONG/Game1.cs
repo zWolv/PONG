@@ -67,7 +67,10 @@ namespace PONG
 
             ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 3, 0));
 
-            score.Add(new Text(canvasWidth / 10, canvasHeight / 10, 0, score1 + " Punten"));
+            score.Add(new Text(100, canvasHeight / 2));
+            score.Add(new Text(canvasWidth - 100, canvasHeight / 2));
+            score.Add(new Text(canvasWidth / 2, 100));
+            score.Add(new Text(canvasWidth / 2, canvasHeight - 100));
 
             foreach (Ball b in ballen)
             {
@@ -96,6 +99,10 @@ namespace PONG
             foreach (Racket p in vierPlayers)
             {
                 p.LoadContent(Content, GraphicsDevice);
+            }
+            foreach(Text num in score)
+            {
+                num.LoadContent(Content);
             }
 
             for (int i = 2; i < 4; i++)
@@ -141,16 +148,19 @@ namespace PONG
                         }
                     }
 
-                        foreach (Ball b in ballen)
-                        {   
-                            foreach(Racket p in tweePlayers)
-                            {
-                                b.tweeSpelers(canvasWidth, canvasHeight);
-                            }
-                            
+                    foreach (Ball b in ballen)
+                    {
+                        foreach (Racket p in tweePlayers)
+                        {
+                            b.tweeSpelers(canvasWidth, canvasHeight);
                         }
 
+                    }
 
+                    for(int i = 0;i < 2; i++)
+                    {
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i]);
+                    }
                     break;
                 case gameStates.VierSpelers:
 
@@ -229,6 +239,11 @@ namespace PONG
                     {
                         b.Draw(_spriteBatch);
                     }
+
+                    for(int i = 0; i < 2; i++)
+                    {
+                        score[i].Draw(_spriteBatch);
+                    }
                     _spriteBatch.End();
 
                     break;
@@ -245,7 +260,18 @@ namespace PONG
                         b.Draw(_spriteBatch);
                     }
 
+                    foreach(Text num in score)
+                    {
+                        num.Draw(_spriteBatch);
+                    }
+
+                    foreach (Text num in score)
+                    {
+                        num.Draw(_spriteBatch);
+                    }
                     _spriteBatch.End();
+
+                    
                     break;
                 case gameStates.GameOver:
                     break;

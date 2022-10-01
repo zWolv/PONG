@@ -165,7 +165,7 @@ namespace PONG
 
         public void Draw(SpriteBatch _spriteBatch)
         {
-            //_spriteBatch.Draw(rectTexture, _pos, null, Color.Red);
+            _spriteBatch.Draw(rectTexture, _pos, null, Color.Red);
             if (richting == direction.vertical)
             {
                 _spriteBatch.Draw(_sprite, _pos, Color.White);
