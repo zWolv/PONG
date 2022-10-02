@@ -1,13 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Schema;
 
 namespace PONG
 {
@@ -30,34 +23,39 @@ namespace PONG
             scoreDisplay = content.Load<SpriteFont>("Score");
         }
 
-        public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who)
+        public void Update(Ball bal, int canvasWidth, int canvasHeight, Racket who, int listItem, Game1 game)
         {
-            bal.scoreUpdate = true;
-            if (bal._location.X < 0)
+            if (bal._location.X < -1 * bal._kirbyBall.Width && listItem == 1)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
                 score++;
-            } else if (bal._location.X > canvasWidth)
+            } else if (bal._location.X > canvasWidth && listItem == 0)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
                 score++;
-            } else if (bal._location.Y > canvasHeight && !bal.tweeRackets)
+            } else if (bal._location.Y > canvasHeight && !bal.tweeRackets && listItem == 2)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
-                //score++;
-            } else if (bal._location.Y < 0 && !bal.tweeRackets)
+                score++;
+            } else if (bal._location.Y < 0 && !bal.tweeRackets && listItem == 3)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
-                //score++;
-            }
-                
+                score++;
+            }   
 
-               
+            //if(score == 5)
+            //{
+            //    game.currentGameState = Game1.gameStates.GameOver;
+            //}
+        }
 
+        public void Reset()
+        {
+            score = 0;
         }
 
         public void Draw(SpriteBatch _spriteBatch)

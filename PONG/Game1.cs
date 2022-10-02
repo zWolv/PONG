@@ -2,15 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D9;
-// SharpDX.Direct2D1;
-using SharpDX.MediaFoundation;
-using SharpDX.Win32;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.DirectoryServices.ActiveDirectory;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Serialization;
-
 namespace PONG
 {
     public class Game1 : Game
@@ -27,7 +19,9 @@ namespace PONG
         static int canvasHeight = 500;
         public Buttons tweeSpelers;
         public Buttons vierSpelers;
+        public Buttons gameOver;
         public List<Text> score = new List<Text>();
+        Texture2D rect;
 
         public enum gameStates
         {
@@ -55,17 +49,18 @@ namespace PONG
             _graphics.PreferredBackBufferHeight = canvasHeight;
             _graphics.ApplyChanges();
 
-            tweeSpelers = new Buttons(400, 250, gameStates.TweeSpelers);
-            vierSpelers = new Buttons(200, 250, gameStates.VierSpelers);
-            tweePlayers.Add(new Racket(26, canvasHeight / 2, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-            tweePlayers.Add(new Racket(973, canvasHeight / 2, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Twee Spelers");
+            vierSpelers = new Buttons(335, 210, gameStates.VierSpelers, "Vier Spelers");
+            gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
+            tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
 
             vierPlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(500, 56, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(500, 477, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            vierPlayers.Add(new Racket(500, 57, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            vierPlayers.Add(new Racket(500, 503, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
 
-            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2, 3, 0));
+            ballen.Add(new Ball(400, canvasHeight / 2, 0, -1));
 
             score.Add(new Text(100, canvasHeight / 2));
             score.Add(new Text(canvasWidth - 100, canvasHeight / 2));
@@ -81,13 +76,15 @@ namespace PONG
             base.Initialize();
         }
 
-            protected override void LoadContent()
-            {   
-               _spriteBatch = new SpriteBatch(GraphicsDevice);
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
 
+            rect = new Texture2D(GraphicsDevice, canvasWidth, canvasHeight);
             tweeSpelers.LoadContent(Content);
             vierSpelers.LoadContent(Content);
+            gameOver.LoadContent(Content);
             foreach (Racket p in tweePlayers)
             {
                 p.LoadContent(Content, GraphicsDevice);
@@ -100,16 +97,9 @@ namespace PONG
             {
                 p.LoadContent(Content, GraphicsDevice);
             }
-            foreach(Text num in score)
+            foreach (Text num in score)
             {
                 num.LoadContent(Content);
-            }
-
-            for (int i = 2; i < 4; i++)
-            {
-                vierPlayers[i].hitbox.Width = vierPlayers[i]._sprite.Height;
-                vierPlayers[i].hitbox.Height = vierPlayers[i]._sprite.Width;
-                vierPlayers[i].hitbox.Offset(vierPlayers[i]._pos - vierPlayers[i].spriteOrigin - new Vector2((float)vierPlayers[i]._sprite.Width, 0));
             }
         }
 
@@ -126,10 +116,6 @@ namespace PONG
                         vierSpelers.Update(this);
                     break;
                 case gameStates.TweeSpelers:
-                    foreach (Racket p in tweePlayers)
-                    {
-                        p.Update();
-                    }
 
                     foreach (Racket p in tweePlayers)
                     {
@@ -148,6 +134,11 @@ namespace PONG
                         }
                     }
 
+                    foreach (Racket p in tweePlayers)
+                    {
+                        p.Update();
+                    }
+
                     foreach (Ball b in ballen)
                     {
                         foreach (Racket p in tweePlayers)
@@ -159,15 +150,12 @@ namespace PONG
 
                     for(int i = 0;i < 2; i++)
                     {
-                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i]);
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i], i, this);
                     }
                     break;
                 case gameStates.VierSpelers:
 
-                    foreach (Racket p in vierPlayers)
-                    {
-                        p.Update();
-                    }
+                    
 
                     //foreach (Racket self in vierPlayers)
                     //{
@@ -197,16 +185,32 @@ namespace PONG
                         }
                     }
 
+                    foreach (Racket p in vierPlayers)
+                    {
+                        p.Update();
+                    }
 
-                        foreach (Ball b in ballen)
-                        {   
-                            foreach(Racket p in vierPlayers)
-                            {
-                                b.vierSpelers(canvasWidth, canvasHeight);
-                            }
-                                
+                    foreach (Ball b in ballen)
+                    {
+                        foreach (Racket p in vierPlayers)
+                        {
+                            b.vierSpelers(canvasWidth, canvasHeight);
                         }
+
+                    }
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        score[i].Update(ballen[0], canvasWidth, canvasHeight, vierPlayers[i], i, this);
+                    }
                     break;
+                case gameStates.GameOver:
+                    gameOver.Update(this);
+                    for(int i = 0; i < 4;i++)
+                    {
+                        score[i].Reset();
+                    }
+                break;
 
             }
 
@@ -274,6 +278,11 @@ namespace PONG
                     
                     break;
                 case gameStates.GameOver:
+                    
+                    _spriteBatch.Begin();
+                    _spriteBatch.Draw(rect, new Vector2(0), Color.DarkBlue);
+                    gameOver.Draw(_spriteBatch);
+                    _spriteBatch.End();
                     break;
             }
 

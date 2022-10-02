@@ -2,13 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using SharpDX.MediaFoundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PONG
 {
@@ -20,26 +13,25 @@ namespace PONG
         int y1;
         MouseState previousMouseState = Mouse.GetState();
         MouseState mouseState = Mouse.GetState();
-        //public enum gameStates
-        //{
-        //    Menu,
-        //    TweeSpelers,
-        //    VierSpelers,
-        //    GameOver
-        //}
+        SpriteFont spriteFont;
         Game1.gameStates gameState;
+        string text;
+        Vector2 center;
 
-        public Buttons(int _x1,int _y1, Game1.gameStates _gameState)
+        public Buttons(int _x1,int _y1, Game1.gameStates _gameState, string _text)
         {
             x1 = _x1;
             y1 = _y1;
             gameState = _gameState;
+            text = _text;
         }
 
         public void LoadContent(ContentManager content)
         {
             _sprite = content.Load<Texture2D>("buttonBounds");
+            spriteFont = content.Load<SpriteFont>("Score");
             pos = new Vector2(x1, y1);
+            center = new Vector2(100,95);
         }
 
         public void Update(Game1 game)
@@ -63,6 +55,7 @@ namespace PONG
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_sprite, pos, Color.White);
+            spriteBatch.DrawString(spriteFont, text, pos + center, Color.Black); 
         }
 
     }
