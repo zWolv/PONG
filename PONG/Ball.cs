@@ -28,7 +28,8 @@ namespace PONG
         //startsnelheid
         public Vector2 _startVelocity;
         //check of er collision is met input racket
-        public float maxVelocity = 7;
+        public float maxVelocity;
+        public int maxCorner;
         bool intersect;
         //random bounce
         Random rnd = new Random();
@@ -74,10 +75,10 @@ namespace PONG
         }
 
         // bounce de bal van het racket als er collision is
-        public void vierSpelers(int canvasWidth, int canvasHeight)
+        public void vierSpelers(int canvasWidth, int canvasHeight, Game1 game)
         {
             //check of de bal wel echt bij een racket is -- geldt ook voor onderstaande statements
-            if (this.intersect && _location.Y < 53)
+            if (this.intersect && _location.Y <= 53)
             {
                 //zorg dat de intersect niet langer dan 1 cycle duurt -- geldt ook voor onderstaande statements
                 this.intersect = false;
@@ -85,33 +86,68 @@ namespace PONG
                 if (_velocity.Y < 0 && _location.Y > 27)
                 {
                     _velocity.Y *= -1;
-                    _velocity.X = rnd.Next(-2,2);
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxCorner = 4;
+                    }
+                    else
+                    {
+                        maxCorner = 7;
+                    }
+                    _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxVelocity = 3;
+                    }
+                    else
+                    {
+                        maxVelocity = 7;
+                    }
+                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
                 }
                 else if (_location.Y < 27)
                 {
                     _velocity.X *= -1;
                 }
             }
-            else if (this.intersect && _location.Y > canvasHeight - (53 + _kirbyBall.Height))
+            else if (this.intersect && _location.Y >= canvasHeight - (53 + _kirbyBall.Height))
             {
                 this.intersect = false;
                 if (_velocity.Y > 0 && _location.Y < canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
                     _velocity.Y *= -1;
-                    _velocity.X = rnd.Next(-2,2);
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxCorner = 4;
+                    }
+                    else
+                    {
+                        maxCorner = 7;
+                    }
+                    _velocity.X = rnd.Next(-1 * maxCorner,maxCorner);
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxVelocity = 3;
+                    }
+                    else
+                    {
+                        maxVelocity = 7;
+                    }
+                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.X)) * -1;
                 }
                 else if (_location.Y > canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
                     _velocity.X *= -1;
                 }
             }
+            
 
             tweeRackets = false;
-            tweeSpelers(canvasWidth, canvasHeight);
+            tweeSpelers(canvasWidth, canvasHeight, game);
         }
 
         //bounce de bal van het racket als er collision is
-        public void tweeSpelers(int canvasWidth, int canvasHeight)
+        public void tweeSpelers(int canvasWidth, int canvasHeight, Game1 game)
         {
             //als er maar 2 rackets zijn, bounced de bal van de boven- en onderkant
             if(tweeRackets)
@@ -123,35 +159,66 @@ namespace PONG
             }
 
             //zie vierSpelers()
-            if (this.intersect && _location.X < 53)
+            if (this.intersect && _location.X <= 53)
             {
                 this.intersect = false;
 
                 if(_velocity.X < 0 && _location.X > 27)
                 {
-                    _velocity.Y = rnd.Next(-5,5);
                     _velocity.X *= -1;
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxCorner = 4;
+                    }
+                    else
+                    {
+                        maxCorner = 7;
+                    }
+                    _velocity.Y = rnd.Next(-1 * maxCorner,maxCorner);
+                    if(game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxVelocity = 3;
+                    } else
+                    {
+                        maxVelocity = 7;
+                    }
                     _velocity.X = maxVelocity - Math.Abs(_velocity.Y);
-                    maxVelocity *= 1.1f;
                 } else if (_location.X < 27)
                 {
                     _velocity.Y *= -1;
                 }
             }      
-
-            else if(this.intersect && _location.X > canvasWidth - (53 + _kirbyBall.Width))
+            else if(this.intersect && _location.X >= canvasWidth - (53 + _kirbyBall.Width))
             {   
                 this.intersect = false;
                 if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.X *= -1;
-                    _velocity.Y = rnd.Next(-5,5);
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxCorner = 4;
+                    }
+                    else
+                    {
+                        maxCorner = 7;
+                    }
+                    _velocity.Y = rnd.Next(-1 * maxCorner,maxCorner);
+                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    {
+                        maxVelocity = 3;
+                    }
+                    else
+                    {
+                        maxVelocity = 7;
+                    }
                     _velocity.X = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
-                    maxVelocity *= 1.1f;
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;
                 }
+            } else
+            {
+                this.intersect = false;
             }
 
             //update de positie van de bal

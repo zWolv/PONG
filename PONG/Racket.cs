@@ -10,9 +10,8 @@ namespace PONG
         int x1;
         int y1;
         //sprite voor rackets
-        public Texture2D _sprite;
-        //corrigeren voor linksboven tekenen
-        public Vector2 spriteOrigin;
+        public Texture2D batje1;
+        public Texture2D batje2;
         //positie
         public Vector2 _pos;
         // input voor de speler
@@ -38,7 +37,6 @@ namespace PONG
         bool canMoveDown = true;
         bool canMoveLeft = true;
         bool canMoveRight = true;
-        Texture2D rectTexture;
 
         public Racket(int _x1, int _y1, Keys _player_up_right, Keys _player_down_left, direction _richting, int _screenWidth, int _screenHeight)
         {
@@ -63,39 +61,55 @@ namespace PONG
             if (richting == direction.vertical)
             {
                 //check of racket binnen scherm is -- geldt ook voor onderstaande statements
-                if (_pos.Y <= height - 116)
+                if (_pos.Y < height - 114)
                 {
                     //check of er input is -- geldt ook voor onderstaande statements
-                    if (state.IsKeyDown(player_down_left))
+                    if (canMoveDown && state.IsKeyDown(player_down_left))
                     {
                         _pos.Y += 5;
+                        if(_pos.Y > height - 114)
+                        {
+                            _pos.Y = height - 114;
+                        }
                     }
                 }
 
-                if (_pos.Y >= height - height + 1)
+                if (_pos.Y > 0)
                 {
-                    if (state.IsKeyDown(player_up_right))
+                    if (canMoveUp && state.IsKeyDown(player_up_right))
                     {
                         _pos.Y -= 5;
+                        if(_pos.Y < 0)
+                        {
+                            _pos.Y = 0;
+                        }
                     }
                 }
             }
 
             if (richting == direction.horizontal)
             {
-                if (_pos.X <= width)
+                if (_pos.X < width - batje2.Width)
                 {
-                    if (state.IsKeyDown(player_up_right))
+                    if (canMoveRight && state.IsKeyDown(player_up_right))
                     {
                         _pos.X += 5;
+                        if(_pos.X > width - batje2.Width)
+                        {
+                            _pos.X = width - batje2.Width;
+                        }
                     }
                 }
 
-                if (_pos.X >= width - width + 114)
+                if (_pos.X > 0)
                 {
-                    if (state.IsKeyDown(player_down_left))
+                    if (canMoveLeft && state.IsKeyDown(player_down_left))
                     {
                         _pos.X -= 5;
+                        if(_pos.X < 1)
+                        {
+                            _pos.X = 0;
+                        }
                     }
                 }
 
@@ -105,61 +119,89 @@ namespace PONG
         //check of rackets met zichzelf colliden en niet meer kunnen bewegen in bepaalde richting
         public void internalIntersect(Racket self, Racket other)
         {
-
-            if (richting == Racket.direction.horizontal)
-            { 
-                if (self.hitbox.Intersects(other.hitbox))
+            if (self.richting == Racket.direction.horizontal)
+            {
+                if (other.richting == Racket.direction.vertical)
                 {
-                    if (self._pos.X > other._pos.X)
+                    if (self.boundingBoxHorizontaalBatje.Intersects(other.boundingBoxVerticaalBatje))
                     {
-                        canMoveLeft = false;
-                    }
-                    else if (self._pos.X < other._pos.X)
-                    {
-                        canMoveRight = false;
-                    }
-
-
-                }
-                else if (richting == Racket.direction.vertical)
-                {
-                    if (self.hitbox.Intersects(other.hitbox))
-                    {
-                        if (self._pos.X < other._pos.X)
+                        if (self._pos.X > other._pos.X)
                         {
-                            canMoveUp = false;
+                            self.canMoveLeft = false;
                         }
-                        else if (self._pos.X > other._pos.X)
+                        else if (self._pos.X < other._pos.X)
                         {
-                            canMoveDown = false;
+                            self.canMoveRight = false;
+                        }
+                        else if(self._pos.X == other._pos.X && self._pos.Y > other._pos.Y)
+                        {
+                            self.canMoveRight = true;
+                            self.canMoveLeft = false;
+                            other.canMoveDown = false;
+                            other.canMoveUp = true;
+                        } else if (self._pos.X == other._pos.X && self._pos.Y < other._pos.Y)
+                        {
+                            self.canMoveLeft = false;
+                            self.canMoveRight = true;
+                            other.canMoveUp = false;
+                            other.canMoveDown = true;
                         }
                     }
                 }
             }
+            else if (self.richting == Racket.direction.vertical)
+            {
+                if (other.richting == Racket.direction.horizontal)
+                {
+                    if (self.boundingBoxVerticaalBatje.Intersects(other.boundingBoxHorizontaalBatje))
+                    {
+                        if (self._pos.Y < other._pos.Y)
+                        {
+                            self.canMoveDown = false;
+                        }
+                        else if (self._pos.Y > other._pos.Y)
+                        {
+                            self.canMoveUp = false;
+                        }
+                        else if (self._pos.Y == other._pos.Y && self._pos.X > other._pos.X)
+                        {
+                            self.canMoveDown = true;
+                            other.canMoveRight = false;
+                            other.canMoveLeft = true;
+                            self.canMoveUp = false;
+                        }
+                        else if (self._pos.Y == other._pos.Y && self._pos.X > other._pos.X)
+                        {
+                            self.canMoveDown = true;
+                            other.canMoveRight = true;
+                            other.canMoveLeft = false;
+                            self.canMoveUp = false;
 
-
+                        }
+                    }
+                }
+            }
         }
 
+
         //bounding box voor de verticale rackets
-        public Rectangle boundingBoxVertical
+        public Rectangle boundingBoxHorizontaalBatje
         {
             get
             {
-                hitbox = _sprite.Bounds;
+                hitbox = batje2.Bounds;
                 hitbox.Offset(_pos);
                 return hitbox;
             }
         }
 
         //bounding box voor horizontale rackets
-        public Rectangle boundingBoxHorizontal
+        public Rectangle boundingBoxVerticaalBatje
         {
             get
             {
-                hitbox = _sprite.Bounds;
-                hitbox.Offset(_pos - new Vector2((float)_sprite.Height, 5));
-                hitbox.Height = _sprite.Width;
-                hitbox.Width = _sprite.Height;
+                hitbox = batje1.Bounds;
+                hitbox.Offset(_pos);
                 return hitbox;
             }
         }
@@ -167,22 +209,9 @@ namespace PONG
         // laad de sprites -- geef ze een positie
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            _sprite = content.Load<Texture2D>("batje");
-            spriteOrigin = new Vector2(_sprite.Width / 2, _sprite.Height / 2);
+            batje1 = content.Load<Texture2D>("batje");
+            batje2 = content.Load<Texture2D>("batje2");
             _pos = new Vector2(x1, y1);
-            _pos = _pos - spriteOrigin;
-
-            //test voor hitbox weergave
-            rectTexture = new Texture2D(device, _sprite.Bounds.Width, _sprite.Bounds.Height);
-            Color[] pixels = new Color[_sprite.Bounds.Width * _sprite.Bounds.Height];
-            for (int y = 0; y < _sprite.Bounds.Height; y++)
-                for (int x = 0; x < _sprite.Bounds.Width; x++)
-                {
-                    pixels[x + y * _sprite.Bounds.Width] = Color.Red;
-                }
-
-            rectTexture.SetData<Color>(pixels);
-
         }
 
         // update de rackets -- overbodig?
@@ -194,45 +223,35 @@ namespace PONG
         //teken de sprites van de rackets
         public void Draw(SpriteBatch _spriteBatch)
         {
-            _spriteBatch.Draw(rectTexture, _pos, null, Color.Red);
             if (richting == direction.vertical)
             {
-                _spriteBatch.Draw(_sprite, _pos, Color.White);
+                _spriteBatch.Draw(batje1, _pos, Color.White);
             }
             else if (richting == direction.horizontal)
             {
-                _spriteBatch.Draw(_sprite, _pos, null, Color.White, 1.5707f, new Vector2(0), 1f, SpriteEffects.None, 0f);
+                _spriteBatch.Draw(batje2, _pos, Color.White);
             }
 
 
         }
 
         // check collision met de bal
-        public void intersectDetection(Rectangle bal)
+        public void intersectDetection(Rectangle balHitbox)
         {
-            if (boundingBoxHorizontal.Intersects(bal) && richting == direction.horizontal)
+            if (richting == direction.horizontal && boundingBoxHorizontaalBatje.Intersects(balHitbox))
             {
                 intersect = true;
-                canMoveUp = false;
-                canMoveDown = false;
-                canMoveRight = false;
-                canMoveLeft = false;
             }
-            else if(boundingBoxVertical.Intersects(bal) && richting == direction.vertical) 
+            else if(richting == direction.vertical && boundingBoxVerticaalBatje.Intersects(balHitbox)) 
             {
                 intersect = true;
-                canMoveUp = false;
-                canMoveDown = false;
-                canMoveRight = false;
-                canMoveLeft = false;
             }
-            else if(!boundingBoxVertical.Intersects(bal) && !boundingBoxHorizontal.Intersects(bal))
+            else if(!boundingBoxVerticaalBatje.Intersects(balHitbox) && !boundingBoxHorizontaalBatje.Intersects(balHitbox))
             {
                 intersect = false;
-                canMoveUp = true;
-                canMoveDown = true;
-                canMoveRight = true;
-                canMoveLeft = true;
+            } else
+            {
+                intersect = false;
             }
         }
     }
