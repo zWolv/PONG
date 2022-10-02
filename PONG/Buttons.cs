@@ -41,7 +41,7 @@ namespace PONG
             _sprite = content.Load<Texture2D>("buttonBounds");
             spriteFont = content.Load<SpriteFont>("Score");
             pos = new Vector2(x1, y1);
-            offset = new Vector2(100,95);
+            offset = new Vector2(80,55);
         }
 
         //check of er geklikt is en update de gamestate

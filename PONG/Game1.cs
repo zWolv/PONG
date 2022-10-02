@@ -23,11 +23,10 @@ namespace PONG
         // variabele voor grootte speelwindow
         static int canvasWidth = 1000;
         static int canvasHeight = 500;
-        //plaats score afhankelijk van gamestate
-        Vector2 scorePos;
         // knoppen op begin- en eindscherm
         public Buttons tweeSpelers;
         public Buttons vierSpelers;
+        public Buttons speedUp;
         public Buttons gameOver;
         // list voor scoredisplay
         public List<Score> score2player = new List<Score>();
@@ -43,6 +42,7 @@ namespace PONG
             Menu,
             TweeSpelers,
             VierSpelers,
+            SpeedUp,
             GameOver,
         }
 
@@ -68,8 +68,9 @@ namespace PONG
             _graphics.ApplyChanges();
 
             //de knoppen van de menus 
-            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Twee Spelers");
-            vierSpelers = new Buttons(335, 210, gameStates.VierSpelers, "Vier Spelers");
+            tweeSpelers = new Buttons(335, 30, gameStates.TweeSpelers, "Twee Spelers");
+            vierSpelers = new Buttons(335, 180, gameStates.VierSpelers, "Vier Spelers");
+            speedUp = new Buttons(335, 330, gameStates.SpeedUp, "Speedup mode");
             gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             //twee rackets toevoegen aan bijbehorende list
             tweePlayers.Add(new Racket(0, 0, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
@@ -80,7 +81,7 @@ namespace PONG
             vierPlayers.Add(new Racket((canvasHeight / 2) - 57, 0, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket((canvasHeight / 2) - 57, canvasHeight - 53, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
             // bal toevoegen aan bijbehorende list
-            ballen.Add(new Ball(400, canvasHeight / 2, 1, 0));
+            ballen.Add(new Ball(400, canvasHeight / 2, 0, 0));
             //scoredisplay toevoegen aan bijbehorende list
             score2player.Add(new Score(100, canvasHeight / 2));
             score2player.Add(new Score(canvasWidth - 100, canvasHeight / 2));
@@ -112,6 +113,7 @@ namespace PONG
             //content voor knoppen laden
             tweeSpelers.LoadContent(Content);
             vierSpelers.LoadContent(Content);
+            speedUp.LoadContent(Content);
             gameOver.LoadContent(Content);
             //content voor tweespeler mode laden
             foreach (Racket p in tweePlayers)
@@ -153,8 +155,10 @@ namespace PONG
                     case gameStates.Menu:
                         tweeSpelers.Update(this);
                         vierSpelers.Update(this);
+                        speedUp.Update(this);
                     break;
                 // gamestate voor de tweespeler mode
+                case gameStates.SpeedUp:
                 case gameStates.TweeSpelers:
                     //bal collision checken
                     foreach (Racket p in tweePlayers)
@@ -334,9 +338,12 @@ namespace PONG
                         vierSpelers.Draw(_spriteBatch);
                     //teken de tweespeler mode knop
                         tweeSpelers.Draw(_spriteBatch);
+                    //teken de speedup mode knop
+                        speedUp.Draw(_spriteBatch);
                         _spriteBatch.End();
                 break;
                 //teken de tweespeler mode
+                case gameStates.SpeedUp:
                 case gameStates.TweeSpelers:
                     _spriteBatch.Begin();
                     //teken de spelers

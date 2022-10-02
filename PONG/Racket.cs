@@ -184,6 +184,7 @@ namespace PONG
         }
 
 
+
         //bounding box voor de verticale rackets
         public Rectangle boundingBoxHorizontaalBatje
         {
