@@ -156,6 +156,7 @@ namespace PONG
             //update de positie van de bal
             _location = Vector2.Add(_location, _velocity);
 
+            //reset de snelheid nadat er gescoord is
             if(_location.X < 0)
             {
                 maxVelocity = 7;
