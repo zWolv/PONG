@@ -28,6 +28,7 @@ namespace PONG
         //startsnelheid
         public Vector2 _startVelocity;
         //check of er collision is met input racket
+        public float maxVelocity = 7;
         bool intersect;
         //random bounce
         Random rnd = new Random();
@@ -130,7 +131,8 @@ namespace PONG
                 {
                     _velocity.Y = rnd.Next(-5,5);
                     _velocity.X *= -1;
-                    _velocity.X = 7 - Math.Abs(_velocity.Y);
+                    _velocity.X = maxVelocity - Math.Abs(_velocity.Y);
+                    maxVelocity *= 1.1f;
                 } else if (_location.X < 27)
                 {
                     _velocity.Y *= -1;
@@ -144,7 +146,8 @@ namespace PONG
                 {
                     _velocity.X *= -1;
                     _velocity.Y = rnd.Next(-5,5);
-                    _velocity.X = (7 - Math.Abs(_velocity.Y)) * -1;
+                    _velocity.X = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
+                    maxVelocity *= 1.1f;
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;
@@ -153,6 +156,15 @@ namespace PONG
 
             //update de positie van de bal
             _location = Vector2.Add(_location, _velocity);
+
+            //reset de snelheid nadat er gescoord is
+            if(_location.X < 0)
+            {
+                maxVelocity = 7;
+            } else if(_location.X > canvasWidth)
+            {
+                maxVelocity = 7;
+            }
         }
 
 
