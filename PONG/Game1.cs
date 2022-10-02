@@ -15,13 +15,12 @@ namespace PONG
         public List<Ball> ballen = new List<Ball>();
         // list voor spelers in verschillende gamemodes
         public List<Racket> tweePlayers = new List<Racket>();
-        public List<Racket> vierPlayers = new List<Racket>();
         // variabele voor grootte speelwindow
         static int canvasWidth = 1000;
         static int canvasHeight = 500;
         // knoppen op begin- en eindscherm
         public Buttons tweeSpelers;
-        public Buttons vierSpelers;
+        public Buttons speedUp;
         public Buttons gameOver;
         // list voor scoredisplay
         public List<Score> score = new List<Score>();
@@ -33,7 +32,7 @@ namespace PONG
         {
             Menu,
             TweeSpelers,
-            VierSpelers,
+            SpeedUp,
             GameOver,
         }
 
@@ -59,24 +58,17 @@ namespace PONG
             _graphics.ApplyChanges();
 
             //de knoppen van de menus 
-            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Twee Spelers");
-            vierSpelers = new Buttons(335, 210, gameStates.VierSpelers, "Vier Spelers");
+            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Standaard mode");
+            speedUp = new Buttons(335, 210, gameStates.SpeedUp, "Speedup mode");
             gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             //twee rackets toevoegen aan bijbehorende list
-            tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-            tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-            // vier rackets toevoegen aan bijbehorende list
-            vierPlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(500, 57, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(500, 503, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, canvasWidth, canvasHeight));
             // bal toevoegen aan bijbehorende list
-            ballen.Add(new Ball(400, canvasHeight / 2, 1, 1));
+            ballen.Add(new Ball(400, canvasHeight / 2));
             //scoredisplay toevoegen aan bijbehorende list
             score.Add(new Score(100, canvasHeight / 2));
             score.Add(new Score(canvasWidth - 100, canvasHeight / 2));
-            score.Add(new Score(canvasWidth / 2, 100));
-            score.Add(new Score(canvasWidth / 2, canvasHeight - 100));
 
             //bal initialiseren
             foreach (Ball b in ballen)
@@ -97,7 +89,7 @@ namespace PONG
             rect = new Texture2D(GraphicsDevice, canvasWidth, canvasHeight);
             //content voor knoppen laden
             tweeSpelers.LoadContent(Content);
-            vierSpelers.LoadContent(Content);
+            speedUp.LoadContent(Content);
             gameOver.LoadContent(Content);
             //content voor tweespeler mode laden
             foreach (Racket p in tweePlayers)
@@ -108,11 +100,6 @@ namespace PONG
             foreach (Ball b in ballen)
             {
                 b.LoadContent(Content);
-            }
-            //content voor vierspeler mode laden
-            foreach (Racket p in vierPlayers)
-            {
-                p.LoadContent(Content, GraphicsDevice);
             }
             //content voor scores laden
             foreach (Score num in score)
@@ -133,9 +120,10 @@ namespace PONG
                 // gamestate voor het startmenu
                     case gameStates.Menu:
                         tweeSpelers.Update(this);
-                        vierSpelers.Update(this);
+                    speedUp.Update(this);
                     break;
                 // gamestate voor de tweespeler mode
+                case gameStates.SpeedUp:
                 case gameStates.TweeSpelers:
 
                     //bal collision checken
@@ -159,7 +147,7 @@ namespace PONG
                     //positie van de rackets updaten
                     foreach (Racket p in tweePlayers)
                     {
-                        p.Update();
+                        p.movement();
                     }
 
                     //bal positie updaten
@@ -167,7 +155,7 @@ namespace PONG
                     {
                         foreach (Racket p in tweePlayers)
                         {
-                            b.tweeSpelers(canvasWidth, canvasHeight);
+                            b.tweeSpelers(canvasWidth, canvasHeight, this);
                         }
 
                     }
@@ -178,67 +166,11 @@ namespace PONG
                         score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i], i, this);
                     }
                     break;
-                    //gamestate voor vierspeler mode
-                case gameStates.VierSpelers:
-
-                    
-                    //check of rackets met andere rackets colliden
-                    //foreach (Racket self in vierPlayers)
-                    //{
-                    //    foreach (Racket other in vierPlayers)
-                    //    {
-                    //        if (self != other)
-                    //        {
-                    //            self.internalIntersect(self, other);
-                    //        }
-                    //    }
-                    //}
-
-                    //bal collision checken
-                    foreach (Racket p in vierPlayers)
-                        {
-                            foreach (Ball b in ballen)
-                            {
-                                p.intersectDetection(b.hitbox);
-                            }
-                        }
-
-                    //update balvelocity bij collision
-                    foreach (Ball b in ballen)
-                    {
-                        foreach (Racket p in vierPlayers)
-                        {
-                            b.intersectDetect(p.intersect);
-                        }
-                    }
-
-                    //positie van rackets updaten
-                    foreach (Racket p in vierPlayers)
-                    {
-                        p.Update();
-                    }
-
-                    //positie van ballen updaten
-                    foreach (Ball b in ballen)
-                    {
-                        foreach (Racket p in vierPlayers)
-                        {
-                            b.vierSpelers(canvasWidth, canvasHeight);
-                        }
-
-                    }
-
-                    //score van spelers(op basis van racket) updaten
-                    for (int i = 0; i < 4; i++)
-                    {
-                        score[i].Update(ballen[0], canvasWidth, canvasHeight, vierPlayers[i], i, this);
-                    }
-                    break;
                     // gamestate voor gameover scherm
                     case gameStates.GameOver:
                         gameOver.Update(this);
                         //reset alle scores
-                        for(int i = 0; i < 4;i++)
+                        for(int i = 0; i < 2;i++)
                         {
                             score[i].Reset();
                         }
@@ -261,13 +193,14 @@ namespace PONG
                 //teken het menu
                     case gameStates.Menu:
                         _spriteBatch.Begin();
-                    //teken de vierspeler mode knop
-                        vierSpelers.Draw(_spriteBatch);
                     //teken de tweespeler mode knop
                         tweeSpelers.Draw(_spriteBatch);
+                    //teken de speedup mode knop
+                    speedUp.Draw(_spriteBatch);
                         _spriteBatch.End();
                     break;
-                    //teken de tweespeler mode
+                //teken de tweespeler mode
+                case gameStates.SpeedUp:
                 case gameStates.TweeSpelers:
                     _spriteBatch.Begin();
                     //teken de spelers
@@ -289,32 +222,6 @@ namespace PONG
                     }
                     _spriteBatch.End();
 
-                    break;
-                    //teken de vierspeler mode
-                case gameStates.VierSpelers:
-                    _spriteBatch.Begin();
-
-                    //teken de rackets
-                    foreach (Racket p in vierPlayers)
-                    {
-                        p.Draw(_spriteBatch);
-                    }
-
-                    //teken de ballen
-                    foreach (Ball b in ballen)
-                    {
-                        b.Draw(_spriteBatch);
-                    }
-
-                    //teken de scores
-                    foreach(Score num in score)
-                    {
-                        num.Draw(_spriteBatch);
-                    }
-
-                    _spriteBatch.End();
-
-                    
                     break;
                     //teken het gameoverscherm
                 case gameStates.GameOver:

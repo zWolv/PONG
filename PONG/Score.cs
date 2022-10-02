@@ -33,30 +33,33 @@ namespace PONG
             if (bal._location.X < -1 * bal._kirbyBall.Width && listItem == 1)
             {
                 bal._location = bal._startLocation;
+                bal._startVelocity.X = bal.rnd.Next(-3, 3);
+                if(bal._startVelocity.X == 0)
+                {
+                    bal._startVelocity.X = 1;
+                }
+                bal._startVelocity.Y = bal.maxVelocity - bal._startVelocity.X;
                 bal._velocity = bal._startVelocity;
+
                 score++;
             } else if (bal._location.X > canvasWidth && listItem == 0)
             {
                 bal._location = bal._startLocation;
+                bal._startVelocity.X = bal.rnd.Next(-3, 3);
+                if (bal._startVelocity.X == 0)
+                {
+                    bal._startVelocity.X = 1;
+                }
+                bal._startVelocity.Y = bal.maxVelocity - bal._startVelocity.X;
                 bal._velocity = bal._startVelocity;
                 score++;
-            } else if (bal._location.Y > canvasHeight && !bal.tweeRackets && listItem == 2)
-            {
-                bal._location = bal._startLocation;
-                bal._velocity = bal._startVelocity;
-                score++;
-            } else if (bal._location.Y < 0 && !bal.tweeRackets && listItem == 3)
-            {
-                bal._location = bal._startLocation;
-                bal._velocity = bal._startVelocity;
-                score++;
-            }   
+            }
 
             //einde van de game als iemand 5 punten heeft
-            //if(score == 5)
-            //{
-            //    game.currentGameState = Game1.gameStates.GameOver;
-            //}
+            if (score == 5)
+            {
+                game.currentGameState = Game1.gameStates.GameOver;
+            }
         }
 
         //reset de score als de game eindigt
