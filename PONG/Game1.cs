@@ -57,8 +57,8 @@ namespace PONG
 
             tweeSpelers = new Buttons(400, 250, gameStates.TweeSpelers);
             vierSpelers = new Buttons(200, 250, gameStates.VierSpelers);
-            tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-            tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(26, canvasHeight / 2, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(973, canvasHeight / 2, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
 
             vierPlayers.Add(new Racket(26, 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));

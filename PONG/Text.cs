@@ -47,12 +47,12 @@ namespace PONG
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
-                score++;
+                //score++;
             } else if (bal._location.Y < 0 && !bal.tweeRackets)
             {
                 bal._location = bal._startLocation;
                 bal._velocity = bal._startVelocity;
-                score++;
+                //score++;
             }
                 
 
@@ -62,7 +62,7 @@ namespace PONG
 
         public void Draw(SpriteBatch _spriteBatch)
         {
-            _spriteBatch.DrawString(scoreDisplay, score.ToString(), new Vector2(placeX, placeY), Color.Pink);
+                _spriteBatch.DrawString(scoreDisplay, score.ToString(), new Vector2(placeX, placeY), Color.Pink);
         }
 
     }
