@@ -60,7 +60,7 @@ namespace PONG
             vierPlayers.Add(new Racket(500, 57, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket(500, 503, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
 
-            ballen.Add(new Ball(400, canvasHeight / 2, 0, -1));
+            ballen.Add(new Ball(400, canvasHeight / 2, 5, 0));
 
             score.Add(new Text(100, canvasHeight / 2));
             score.Add(new Text(canvasWidth - 100, canvasHeight / 2));

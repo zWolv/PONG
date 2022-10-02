@@ -106,10 +106,12 @@ namespace PONG
             if (this.intersect && _location.X < 53)
             {
                 this.intersect = false;
+
                 if(_velocity.X < 0 && _location.X > 27)
                 {
+                    _velocity.Y = rnd.Next(-5,5);
                     _velocity.X *= -1;
-                    _velocity.Y = rnd.Next(-2,2);
+                    _velocity.X = 7 - Math.Abs(_velocity.Y);
                 } else if (_location.X < 27)
                 {
                     _velocity.Y *= -1;
@@ -122,7 +124,8 @@ namespace PONG
                 if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.X *= -1;
-                    _velocity.Y = rnd.Next(-2,2);
+                    _velocity.Y = rnd.Next(-5,5);
+                    _velocity.X = (7 - Math.Abs(_velocity.Y)) * -1;
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;
