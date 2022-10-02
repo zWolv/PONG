@@ -19,6 +19,7 @@ namespace PONG
         public Vector2 _startLocation;
         public Vector2 _velocity;
         public Vector2 _startVelocity;
+        public float maxVelocity = 7;
         bool intersect;
         Random rnd = new Random();
         public string Scoreboard;
@@ -111,7 +112,8 @@ namespace PONG
                 {
                     _velocity.Y = rnd.Next(-5,5);
                     _velocity.X *= -1;
-                    _velocity.X = 7 - Math.Abs(_velocity.Y);
+                    _velocity.X = maxVelocity - Math.Abs(_velocity.Y);
+                    maxVelocity *= 1.1f;
                 } else if (_location.X < 27)
                 {
                     _velocity.Y *= -1;
@@ -125,7 +127,8 @@ namespace PONG
                 {
                     _velocity.X *= -1;
                     _velocity.Y = rnd.Next(-5,5);
-                    _velocity.X = (7 - Math.Abs(_velocity.Y)) * -1;
+                    _velocity.X = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
+                    maxVelocity *= 1.1f;
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;
@@ -133,6 +136,14 @@ namespace PONG
             }
 
             _location = Vector2.Add(_location, _velocity);
+
+            if(_location.X < 0)
+            {
+                maxVelocity = 7;
+            } else if(_location.X > canvasWidth)
+            {
+                maxVelocity = 7;
+            }
         }
 
             public void LoadContent(ContentManager content)
