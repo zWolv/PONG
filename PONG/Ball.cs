@@ -57,6 +57,7 @@ namespace PONG
         //initialize startwaardes
         public void Initialize()
         {
+            _location = new Vector2(x, y);
             _startLocation = new Vector2(x - 25, y - 25);
             _velocity = new Vector2(speedX, speedY);
             _startVelocity = new Vector2(speedX, speedY);
@@ -156,7 +157,7 @@ namespace PONG
 
 
             
-            // laad de content van de bal
+            //laad de content van de bal
             public void LoadContent(ContentManager content)
             {
                 _kirbyBall = content.Load<Texture2D>("KirbyBallSprite");
