@@ -341,6 +341,16 @@ namespace PONG
 
                             score2player[i].Reset();
                         }
+
+                        foreach(Racket p in tweePlayers)
+                        {
+                            p.resetPosition();
+                        }
+
+                        foreach(Racket p in vierPlayers)
+                        {
+                            p.resetPosition();
+                        }
                     break;
                     default:
                     break;

@@ -91,7 +91,7 @@ namespace PONG
             }
             else
             {
-                maxCorner = 7;
+                maxCorner = 6;
             }
             _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
             if (game.currentGameState == Game1.gameStates.VierSpelers)
@@ -112,15 +112,16 @@ namespace PONG
                 //zorg dat de intersect niet langer dan 1 cycle duurt -- geldt ook voor onderstaande statements
                 this.intersect = false;
                 //check de richting van de bal en of de bal al voorbij de helft van het batje is -- geldt ook voor onderstaande statements
-                if (_velocity.Y < 0 && _location.Y > 27)
+                if (_velocity.Y < 0 && _location.Y >= 27)
                 {
                     _velocity.Y *= -1;
                     snelheidVierSpelers(game);
+                    _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
                     if (_velocity.X == 0)
                     {
                         _velocity.X = 1;
                     }
-                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
+                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.X)) * -1;
                 }
                 else if (_location.Y < 27)
                 {
@@ -130,10 +131,11 @@ namespace PONG
             else if (this.intersect && _location.Y >= canvasHeight - (53 + _kirbyBall.Height))
             {
                 this.intersect = false;
-                if (_velocity.Y > 0 && _location.Y < canvasHeight - (53 + (_kirbyBall.Height / 2)))
+                if (_velocity.Y > 0 && _location.Y <= canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
                     _velocity.Y *= -1;
                     snelheidVierSpelers(game);
+                    _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
                     if (_velocity.X == 0)
                     {
                         _velocity.X = 1;
@@ -155,10 +157,11 @@ namespace PONG
             {
                 this.intersect = false;
 
-                if(_velocity.X < 0 && _location.X > 27)
+                if(_velocity.X < 0 && _location.X >= 27)
                 {
                     _velocity.X *= -1;
                     snelheidVierSpelers(game);
+                    _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
                     if (_velocity.Y == 0)
                     {
                         _velocity.Y = 1;
@@ -172,10 +175,11 @@ namespace PONG
             else if(this.intersect && _location.X >= canvasWidth - (53 + _kirbyBall.Width))
             {   
                 this.intersect = false;
-                if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
+                if(_velocity.X > 0 && _location.X <= canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.X *= -1;
                     snelheidVierSpelers(game);
+                    _velocity.Y = rnd.Next(-1 * maxCorner, maxCorner);
                     if (_velocity.Y == 0)
                     {
                         _velocity.Y = 1;

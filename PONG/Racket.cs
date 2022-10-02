@@ -119,7 +119,10 @@ namespace PONG
             }
         }
 
-
+        public void resetPosition()
+        {
+            _pos = new Vector2(x1, y1);
+        }
         public void resetMovementPossibilities()
         {
             canMoveDown = true;

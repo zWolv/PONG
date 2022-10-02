@@ -68,11 +68,11 @@ namespace PONG
                 {
                     balScoreUpdate(bal, canvasWidth);
                 }
-                else if (bal._location.Y > canvasHeight && !bal.tweeRackets && listItem == 2)
+                else if (bal._location.Y > canvasHeight && listItem == 2)
                 {
                     balScoreUpdate(bal, canvasWidth);
                 }
-                else if (bal._location.Y < -1 * bal._kirbyBall.Height && !bal.tweeRackets && listItem == 3)
+                else if (bal._location.Y < -1 * bal._kirbyBall.Height && listItem == 3)
                 {
                     balScoreUpdate(bal, canvasWidth);
                 }
