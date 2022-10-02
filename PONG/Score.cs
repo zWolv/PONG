@@ -68,7 +68,7 @@ namespace PONG
         //teken de score
         public void Draw(SpriteBatch _spriteBatch)
         {
-            _spriteBatch.DrawString(scoreDisplay, score.ToString(), new Vector2(placeX, placeY), Color.Pink);
+                _spriteBatch.DrawString(scoreDisplay, score.ToString(), new Vector2(placeX, placeY), Color.Pink);
         }
 
     }
