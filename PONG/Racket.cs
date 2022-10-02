@@ -21,14 +21,6 @@ namespace PONG
         public Rectangle hitbox;
         //bool voor collision
         public bool intersect;
-        //enum voor richting van het racket
-       public enum direction
-        {
-            horizontal,
-            vertical
-        }
-        //richting van het racket
-        public direction richting;
         //grootte van het speelscherm
         int width;
         int height;
@@ -38,14 +30,15 @@ namespace PONG
         bool canMoveLeft = true;
         bool canMoveRight = true;
 
-        public Racket(int _x1, int _y1, Keys _player_up_right, Keys _player_down_left, direction _richting, int _screenWidth, int _screenHeight)
+
+
+        public Racket(int _x1, int _y1, Keys _player_up_right, Keys _player_down_left, int _screenWidth, int _screenHeight)
         {
             //geef de waardes van het geïnstancieerde object mee aan de class
             x1 = _x1;
             y1 = _y1;
             player_up_right = _player_up_right;
             player_down_left = _player_down_left;
-            richting = _richting;
             height = _screenHeight;
             width = _screenWidth;
 
@@ -57,9 +50,7 @@ namespace PONG
             //check of een knop ingedrukt wordt
             KeyboardState state = Keyboard.GetState();
 
-            //check welke richting de racket beweegt -- geldt ook voor onderstaande statements
-            if (richting == direction.vertical)
-            {
+           
                 //check of racket binnen scherm is -- geldt ook voor onderstaande statements
                 if (_pos.Y < height - 114)
                 {
@@ -194,7 +185,7 @@ namespace PONG
                 return hitbox;
             }
         }
-
+        
         //bounding box voor horizontale rackets
         public Rectangle boundingBoxVerticaalBatje
         {
@@ -214,12 +205,6 @@ namespace PONG
             _pos = new Vector2(x1, y1);
         }
 
-        // update de rackets -- overbodig?
-        public void Update()
-        {
-            movement();
-        }
-
         //teken de sprites van de rackets
         public void Draw(SpriteBatch _spriteBatch)
         {
@@ -231,8 +216,6 @@ namespace PONG
             {
                 _spriteBatch.Draw(batje2, _pos, Color.White);
             }
-
-
         }
 
         // check collision met de bal

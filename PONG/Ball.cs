@@ -12,9 +12,6 @@ namespace PONG
         //positie
         float x;
         float y;
-        //snelheid
-        float speedX;
-        float speedY;
         //bal texture
         public Texture2D _kirbyBall;
         // corrigeren voor het linksboven tekenen
@@ -32,17 +29,13 @@ namespace PONG
         public int maxCorner;
         bool intersect;
         //random bounce
-        Random rnd = new Random();
-        //wordt er met 2 of meer rackets gespeeld
-        public bool tweeRackets = true;
+        public Random rnd = new Random();
 
-        public Ball(float _x, float _y, float _speedX, float _speedY)
+        public Ball(float _x, float _y)
         {
-            //geef de waardes van het geïnstancieerde object mee aan de class
+            //geef de waardes van het geÃ¯nstancieerde object mee aan de class
             x = _x;
             y = _y;
-            speedX = _speedX;
-            speedY = _speedY;
         }
 
         //hitbox voor collision
@@ -61,8 +54,19 @@ namespace PONG
         {
             _location = new Vector2(x, y);
             _startLocation = new Vector2(x - 25, y - 25);
-            _velocity = new Vector2(speedX, speedY);
-            _startVelocity = new Vector2(speedX, speedY);
+
+            _velocity = new Vector2(1, 0);
+            if(_velocity.X == 0)
+            {
+                _velocity.X = 1;
+            }
+            _velocity.Y = maxVelocity - _velocity.X;
+            _startVelocity = new Vector2(0, 0);
+            if(_startVelocity.X == 0)
+            {
+                _startVelocity.X = 1;
+            }
+            _startVelocity.Y = maxVelocity - _startVelocity.X;
         }
 
         //neem de intersect bool van rackets over
@@ -73,6 +77,7 @@ namespace PONG
                 this.intersect = true;
             }
         }
+
 
         // bounce de bal van het racket als er collision is
         public void vierSpelers(int canvasWidth, int canvasHeight, Game1 game)
@@ -146,23 +151,21 @@ namespace PONG
             tweeSpelers(canvasWidth, canvasHeight, game);
         }
 
+
         //bounce de bal van het racket als er collision is
         public void tweeSpelers(int canvasWidth, int canvasHeight, Game1 game)
         {
-            //als er maar 2 rackets zijn, bounced de bal van de boven- en onderkant
-            if(tweeRackets)
-            {
+                // bal bounced van boven- en onderkant
                 if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
                 {
                     _velocity.Y *= -1;
                 }
-            }
-
+                
             //zie vierSpelers()
             if (this.intersect && _location.X <= 53)
             {
                 this.intersect = false;
-
+                //check waar de bal collision heeft
                 if(_velocity.X < 0 && _location.X > 27)
                 {
                     _velocity.X *= -1;
@@ -183,12 +186,21 @@ namespace PONG
                         maxVelocity = 7;
                     }
                     _velocity.X = maxVelocity - Math.Abs(_velocity.Y);
+                    
+                    if (game.currentGameState == Game1.gameStates.SpeedUp)
+                    {
+                        maxVelocity *= 1.1f;
+                    }
+
                 } else if (_location.X < 27)
                 {
+                    //als de bal te ver is, kan deze niet terug het veld in bouncen
                     _velocity.Y *= -1;
                 }
             }      
-            else if(this.intersect && _location.X >= canvasWidth - (53 + _kirbyBall.Width))
+
+            //zie statements hierboven
+            else if(this.intersect && _location.X > canvasWidth - (53 + _kirbyBall.Width))
             {   
                 this.intersect = false;
                 if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
@@ -212,6 +224,11 @@ namespace PONG
                         maxVelocity = 7;
                     }
                     _velocity.X = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
+                    
+                    if(game.currentGameState == Game1.gameStates.SpeedUp)
+                    {
+                        maxVelocity *= 1.1f;
+                    }
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;
@@ -225,7 +242,7 @@ namespace PONG
             _location = Vector2.Add(_location, _velocity);
 
             //reset de snelheid nadat er gescoord is
-            if(_location.X < 0)
+            if(_location.X < -1 * _kirbyBall.Width)
             {
                 maxVelocity = 7;
             } else if(_location.X > canvasWidth)

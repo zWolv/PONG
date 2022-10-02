@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using SharpDX.MediaFoundation;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,7 +17,6 @@ namespace PONG
         public List<Ball> ballen = new List<Ball>();
         // list voor spelers in verschillende gamemodes
         public List<Racket> tweePlayers = new List<Racket>();
-        public List<Racket> vierPlayers = new List<Racket>();
         // variabele voor grootte speelwindow
         static int canvasWidth = 1000;
         static int canvasHeight = 500;
@@ -27,7 +24,8 @@ namespace PONG
         Vector2 scorePos;
         // knoppen op begin- en eindscherm
         public Buttons tweeSpelers;
-        public Buttons vierSpelers;
+        public Buttons speedUp;
+        public Buttons tweeBallen
         public Buttons gameOver;
         // list voor scoredisplay
         public List<Score> score2player = new List<Score>();
@@ -42,7 +40,8 @@ namespace PONG
         {
             Menu,
             TweeSpelers,
-            VierSpelers,
+            SpeedUp,
+            TweeBallen,
             GameOver,
         }
 
@@ -68,8 +67,9 @@ namespace PONG
             _graphics.ApplyChanges();
 
             //de knoppen van de menus 
-            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Twee Spelers");
-            vierSpelers = new Buttons(335, 210, gameStates.VierSpelers, "Vier Spelers");
+            tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Standaard mode");
+            speedUp = new Buttons(335, 210, gameStates.SpeedUp, "Speedup mode");
+            tweeBallen = new Buttons(335, 360, gameStates.TweeBallen, "Twee-ballen mode");
             gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             //twee rackets toevoegen aan bijbehorende list
             tweePlayers.Add(new Racket(0, 0, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
@@ -111,7 +111,8 @@ namespace PONG
             rect = new Texture2D(GraphicsDevice, canvasWidth, canvasHeight);
             //content voor knoppen laden
             tweeSpelers.LoadContent(Content);
-            vierSpelers.LoadContent(Content);
+            speedUp.LoadContent(Content);
+            tweeBallen.LoadContent(Content);
             gameOver.LoadContent(Content);
             //content voor tweespeler mode laden
             foreach (Racket p in tweePlayers)
@@ -122,11 +123,6 @@ namespace PONG
             foreach (Ball b in ballen)
             {
                 b.LoadContent(Content);
-            }
-            //content voor vierspeler mode laden
-            foreach (Racket p in vierPlayers)
-            {
-                p.LoadContent(Content, GraphicsDevice);
             }
             //content voor scores laden
             foreach (Score num in score2player)
@@ -152,9 +148,10 @@ namespace PONG
                 // gamestate voor het startmenu
                     case gameStates.Menu:
                         tweeSpelers.Update(this);
-                        vierSpelers.Update(this);
+                    speedUp.Update(this);
                     break;
                 // gamestate voor de tweespeler mode
+                case gameStates.SpeedUp:
                 case gameStates.TweeSpelers:
                     //bal collision checken
                     foreach (Racket p in tweePlayers)
@@ -173,7 +170,6 @@ namespace PONG
                             b.intersectDetect(p.intersect);
                         }
                     }
-
                     //bal positie updaten
                     foreach (Ball b in ballen)
                     {
@@ -186,7 +182,7 @@ namespace PONG
                     //positie van de rackets updaten
                     foreach (Racket p in tweePlayers)
                     {
-                        p.Update();
+                        p.movement();
                     }
 
                     //score per racket updaten als nodig is
@@ -217,7 +213,7 @@ namespace PONG
                     {
                         foreach (Racket p in vierPlayers)
                         {
-                            b.intersectDetect(p.intersect);
+                            score[i].Update(b, canvasWidth, canvasHeight, tweePlayers[i], i, this);
                         }
                     }
 
@@ -245,7 +241,7 @@ namespace PONG
                     //positie van rackets updaten
                     foreach (Racket p in vierPlayers)
                     {
-                        p.Update();
+                        p.movement();
                     }
 
 
@@ -330,12 +326,14 @@ namespace PONG
                 //teken het menu
                     case gameStates.Menu:
                         _spriteBatch.Begin();
-                    //teken de vierspeler mode knop
-                        vierSpelers.Draw(_spriteBatch);
                     //teken de tweespeler mode knop
                         tweeSpelers.Draw(_spriteBatch);
+                    //teken de speedup mode knop
+                    speedUp.Draw(_spriteBatch);
                         _spriteBatch.End();
-                break;
+                    break;
+                //teken de speedup mode
+                case gameStates.SpeedUp:
                 //teken de tweespeler mode
                 case gameStates.TweeSpelers:
                     _spriteBatch.Begin();
@@ -357,7 +355,6 @@ namespace PONG
                         num.Draw(_spriteBatch);
                     }
                     _spriteBatch.End();
-
                 break;
                 //teken de vierspeler mode
                 case gameStates.VierSpelers:
@@ -387,7 +384,6 @@ namespace PONG
                 break;
                 //teken het gameoverscherm
                 case gameStates.GameOver:
-                    
                     _spriteBatch.Begin();
                     _spriteBatch.DrawString(spriteFont, winner + " is de winnaar!", new Vector2(360, 100), Color.Black);
                     //teken de achtergrond over de gespeelde gamemode
