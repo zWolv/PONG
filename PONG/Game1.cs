@@ -187,8 +187,14 @@ namespace PONG
                     {
                         foreach (Racket p in tweePlayers)
                         {
-                            b.tweeSpelers(canvasWidth, canvasHeight, this);
+                            b.verticalRacketCollision(canvasWidth, canvasHeight, this);
                         }
+                    }
+
+                    //positie van bal updaten
+                    foreach (Ball b in ballen)
+                    {
+                        b.movement();
                     }
 
                     //positie van de rackets updaten
@@ -232,12 +238,12 @@ namespace PONG
                     //check of rackets met andere rackets colliden
                     foreach (Racket self in vierPlayers)
                     {   
-                        self.resetMovement();
+                        self.resetMovementPossibilities();
                         foreach (Racket other in vierPlayers)
                         {
                             if (self != other)
                             {
-                                self.internalIntersect(self, other);
+                                self.racketIntersect(self, other);
                             }
                         }
                     }
@@ -247,8 +253,22 @@ namespace PONG
                     {
                         foreach (Racket p in vierPlayers)
                         {
-                            b.vierSpelers(canvasWidth, canvasHeight, this);
+                            b.horizontalRacketCollision(canvasWidth, canvasHeight, this);
                         }
+                    }
+
+                    foreach (Ball b in ballen)
+                    {
+                        foreach (Racket p in vierPlayers)
+                        {
+                            b.verticalRacketCollision(canvasWidth, canvasHeight, this);
+                        }
+                    }
+
+                    //positie van bal updaten
+                    foreach (Ball b in ballen)
+                    {
+                        b.movement();
                     }
 
                     //positie van rackets updaten

@@ -104,7 +104,7 @@ namespace PONG
             }
         }
         // bounce de bal van het racket als er collision is
-        public void vierSpelers(int canvasWidth, int canvasHeight, Game1 game)
+        public void horizontalRacketCollision(int canvasWidth, int canvasHeight, Game1 game)
         {
             //check of de bal wel echt bij een racket is -- geldt ook voor onderstaande statements
             if (this.intersect && _location.Y <= 53)
@@ -145,13 +145,10 @@ namespace PONG
                     _velocity.X *= -1;
                 }
             }
-
-            tweeRackets = false;
-            tweeSpelers(canvasWidth, canvasHeight, game);
         }
 
         //bounce de bal van het racket als er collision is
-        public void tweeSpelers(int canvasWidth, int canvasHeight, Game1 game)
+        public void verticalRacketCollision(int canvasWidth, int canvasHeight, Game1 game)
         {
             //als er maar 2 rackets zijn, bounced de bal van de boven- en onderkant
             if(tweeRackets)
@@ -203,18 +200,26 @@ namespace PONG
             }
 
             //update de positie van de bal
-            _location = Vector2.Add(_location, _velocity);
 
-            //reset de snelheid nadat er gescoord is
-            if(_location.X < 0)
+        }
+
+
+        public void resetVelocity(int canvasWidth)
+        {
+            if (_location.X < 0)
             {
                 maxVelocity = 7;
-            } else if(_location.X > canvasWidth)
+            }
+            else if (_location.X > canvasWidth)
             {
                 maxVelocity = 7;
             }
         }
-
+        //update de positie van de bal
+        public void movement()
+        {
+            _location = Vector2.Add(_location, _velocity);
+        }
 
             
             //laad de content van de bal

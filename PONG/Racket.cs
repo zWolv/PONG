@@ -120,15 +120,16 @@ namespace PONG
         }
 
 
-        public void resetMovement()
+        public void resetMovementPossibilities()
         {
             canMoveDown = true;
             canMoveUp = true;
             canMoveLeft = true;
             canMoveRight = true;
         }
+
         //check of rackets met zichzelf colliden en niet meer kunnen bewegen in bepaalde richting
-        public void internalIntersect(Racket self, Racket other)
+        public void racketIntersect(Racket self, Racket other)
         {
             if (self.richting == Racket.direction.horizontal)
             {
