@@ -1,4 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿/// Gemaakt door Thomas van Egmond en Steijn Hoks
+///              8471533              5002311
+
+
+
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -225,7 +231,8 @@ namespace PONG
 
                     //check of rackets met andere rackets colliden
                     foreach (Racket self in vierPlayers)
-                    {
+                    {   
+                        self.resetMovement();
                         foreach (Racket other in vierPlayers)
                         {
                             if (self != other)

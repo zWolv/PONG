@@ -1,4 +1,6 @@
-
+/// Gemaakt door Thomas van Egmond en Steijn Hoks
+///              8471533              5002311
+///              
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -57,7 +59,7 @@ namespace PONG
             _location = new Vector2(x, y);
             _startLocation = new Vector2(x - 25, y - 25);
 
-            _velocity = new Vector2(1, 0);
+            _velocity = new Vector2(0, 0);
             if (_velocity.X == 0)
             {
                 _velocity.X = 1;
@@ -80,6 +82,27 @@ namespace PONG
             }
         }
 
+
+        public void snelheidVierSpelers(Game1 game)
+        {
+            if (game.currentGameState == Game1.gameStates.VierSpelers)
+            {
+                maxCorner = 4;
+            }
+            else
+            {
+                maxCorner = 7;
+            }
+            _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
+            if (game.currentGameState == Game1.gameStates.VierSpelers)
+            {
+                maxVelocity = 3;
+            }
+            else
+            {
+                maxVelocity = 7;
+            }
+        }
         // bounce de bal van het racket als er collision is
         public void vierSpelers(int canvasWidth, int canvasHeight, Game1 game)
         {
@@ -92,22 +115,10 @@ namespace PONG
                 if (_velocity.Y < 0 && _location.Y > 27)
                 {
                     _velocity.Y *= -1;
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    snelheidVierSpelers(game);
+                    if (_velocity.X == 0)
                     {
-                        maxCorner = 4;
-                    }
-                    else
-                    {
-                        maxCorner = 7;
-                    }
-                    _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
-                    {
-                        maxVelocity = 3;
-                    }
-                    else
-                    {
-                        maxVelocity = 7;
+                        _velocity.X = 1;
                     }
                     _velocity.Y = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
                 }
@@ -122,22 +133,10 @@ namespace PONG
                 if (_velocity.Y > 0 && _location.Y < canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
                     _velocity.Y *= -1;
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    snelheidVierSpelers(game);
+                    if (_velocity.X == 0)
                     {
-                        maxCorner = 4;
-                    }
-                    else
-                    {
-                        maxCorner = 7;
-                    }
-                    _velocity.X = rnd.Next(-1 * maxCorner,maxCorner);
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
-                    {
-                        maxVelocity = 3;
-                    }
-                    else
-                    {
-                        maxVelocity = 7;
+                        _velocity.X = 1;
                     }
                     _velocity.Y = (maxVelocity - Math.Abs(_velocity.X)) * -1;
                 }
@@ -146,7 +145,6 @@ namespace PONG
                     _velocity.X *= -1;
                 }
             }
-            
 
             tweeRackets = false;
             tweeSpelers(canvasWidth, canvasHeight, game);
@@ -172,21 +170,10 @@ namespace PONG
                 if(_velocity.X < 0 && _location.X > 27)
                 {
                     _velocity.X *= -1;
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    snelheidVierSpelers(game);
+                    if (_velocity.Y == 0)
                     {
-                        maxCorner = 4;
-                    }
-                    else
-                    {
-                        maxCorner = 7;
-                    }
-                    _velocity.Y = rnd.Next(-1 * maxCorner,maxCorner);
-                    if(game.currentGameState == Game1.gameStates.VierSpelers)
-                    {
-                        maxVelocity = 3;
-                    } else
-                    {
-                        maxVelocity = 7;
+                        _velocity.Y = 1;
                     }
                     _velocity.X = maxVelocity - Math.Abs(_velocity.Y);
                 } else if (_location.X < 27)
@@ -200,22 +187,10 @@ namespace PONG
                 if(_velocity.X > 0 && _location.X < canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.X *= -1;
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
+                    snelheidVierSpelers(game);
+                    if (_velocity.Y == 0)
                     {
-                        maxCorner = 4;
-                    }
-                    else
-                    {
-                        maxCorner = 7;
-                    }
-                    _velocity.Y = rnd.Next(-1 * maxCorner,maxCorner);
-                    if (game.currentGameState == Game1.gameStates.VierSpelers)
-                    {
-                        maxVelocity = 3;
-                    }
-                    else
-                    {
-                        maxVelocity = 7;
+                        _velocity.Y = 1;
                     }
                     _velocity.X = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))

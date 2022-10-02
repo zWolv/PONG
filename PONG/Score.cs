@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿/// Gemaakt door Thomas van Egmond en Steijn Hoks
+///              8471533              5002311
+
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
