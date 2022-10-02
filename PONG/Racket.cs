@@ -32,16 +32,13 @@ namespace PONG
         }
         //richting van het racket
         public direction richting;
-        //grootte van het speelscherm
-        int width;
-        int height;
         //bools of het racket ergens heen kan bewegen
         bool canMoveUp = true;
         bool canMoveDown = true;
         bool canMoveLeft = true;
         bool canMoveRight = true;
 
-        public Racket(int _x1, int _y1, Keys _player_up_right, Keys _player_down_left, direction _richting, int _screenWidth, int _screenHeight)
+        public Racket(int _x1, int _y1, Keys _player_up_right, Keys _player_down_left, direction _richting)
         {
             //geef de waardes van het geïnstancieerde object mee aan de class
             x1 = _x1;
@@ -49,13 +46,11 @@ namespace PONG
             player_up_right = _player_up_right;
             player_down_left = _player_down_left;
             richting = _richting;
-            height = _screenHeight;
-            width = _screenWidth;
 
         }
 
         //update de positie van een racket
-        public void movement()
+        public void movement(int height, int width)
         {
             //check of een knop ingedrukt wordt
             KeyboardState state = Keyboard.GetState();

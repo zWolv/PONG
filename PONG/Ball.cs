@@ -121,7 +121,7 @@ namespace PONG
                     {
                         _velocity.X = 1;
                     }
-                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.X)) * -1;
+                    _velocity.X = (maxVelocity - Math.Abs(_velocity.X)) * -1;
                 }
                 else if (_location.Y < 27)
                 {
@@ -140,7 +140,7 @@ namespace PONG
                     {
                         _velocity.X = 1;
                     }
-                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.X)) * -1;
+                    _velocity.X = (maxVelocity - Math.Abs(_velocity.X)) * -1;
                 }
                 else if (_location.Y > canvasHeight - (53 + (_kirbyBall.Height / 2)))
                 {
@@ -161,12 +161,12 @@ namespace PONG
                 {
                     _velocity.X *= -1;
                     snelheidVierSpelers(game);
-                    _velocity.X = rnd.Next(-1 * maxCorner, maxCorner);
+                    _velocity.Y = rnd.Next(-1 * maxCorner, maxCorner);
                     if (_velocity.Y == 0)
                     {
                         _velocity.Y = 1;
                     }
-                    _velocity.X = maxVelocity - Math.Abs(_velocity.Y);
+                    _velocity.Y = maxVelocity - Math.Abs(_velocity.Y);
                 } else if (_location.X < 27)
                 {
                     _velocity.Y *= -1;
@@ -184,7 +184,7 @@ namespace PONG
                     {
                         _velocity.Y = 1;
                     }
-                    _velocity.X = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
+                    _velocity.Y = (maxVelocity - Math.Abs(_velocity.Y)) * -1;
                 } else if (_location.X > canvasWidth - (53 + (_kirbyBall.Width / 2)))
                 {
                     _velocity.Y *= -1;

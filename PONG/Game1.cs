@@ -77,13 +77,13 @@ namespace PONG
             speedUp = new Buttons(335, 330, gameStates.SpeedUp, "Speedup mode");
             gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             //twee rackets toevoegen aan bijbehorende list
-            tweePlayers.Add(new Racket(0, (canvasHeight / 2) - 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-            tweePlayers.Add(new Racket(canvasWidth - 53, (canvasHeight / 2) - 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(0, (canvasHeight / 2) - 57, Keys.W, Keys.S, Racket.direction.vertical));
+            tweePlayers.Add(new Racket(canvasWidth - 53, (canvasHeight / 2) - 57, Keys.Up, Keys.Down, Racket.direction.vertical));
             // vier rackets toevoegen aan bijbehorende list
-            vierPlayers.Add(new Racket(0, (canvasHeight / 2) - 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket(canvasHeight - 53, (canvasHeight / 2) - 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket((canvasHeight / 2) - 57, 0, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
-            vierPlayers.Add(new Racket((canvasHeight / 2) - 57, canvasHeight - 53, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
+            vierPlayers.Add(new Racket(0, (canvasHeight / 2) - 57, Keys.W, Keys.S, Racket.direction.vertical));
+            vierPlayers.Add(new Racket(canvasHeight - 53, (canvasHeight / 2) - 57, Keys.Up, Keys.Down, Racket.direction.vertical));
+            vierPlayers.Add(new Racket((canvasHeight / 2) - 57, 0, Keys.Right, Keys.Left, Racket.direction.horizontal));
+            vierPlayers.Add(new Racket((canvasHeight / 2) - 57, canvasHeight - 53, Keys.H, Keys.G, Racket.direction.horizontal));
             // bal toevoegen aan bijbehorende list
             ballen.Add(new Ball(400, canvasHeight / 2));
             //scoredisplay toevoegen aan bijbehorende list
@@ -201,7 +201,7 @@ namespace PONG
                     //positie van de rackets updaten
                     foreach (Racket p in tweePlayers)
                     {
-                        p.movement();
+                        p.movement(canvasHeight, canvasWidth);
                     }
 
                     //score per racket updaten als nodig is
@@ -275,7 +275,7 @@ namespace PONG
                     //positie van rackets updaten
                     foreach (Racket p in vierPlayers)
                     {
-                        p.movement();
+                        p.movement(canvasHeight, canvasWidth);
                     }
 
 
