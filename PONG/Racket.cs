@@ -10,9 +10,8 @@ namespace PONG
         int x1;
         int y1;
         //sprite voor rackets
-        public Texture2D _sprite;
-        //corrigeren voor linksboven tekenen
-        public Vector2 spriteOrigin;
+        public Texture2D batje1;
+        public Texture2D batje2;
         //positie
         public Vector2 _pos;
         // input voor de speler
@@ -25,6 +24,12 @@ namespace PONG
         //grootte van het speelscherm
         int width;
         int height;
+        //bools of het racket ergens heen kan bewegen
+        bool canMoveUp = true;
+        bool canMoveDown = true;
+        bool canMoveLeft = true;
+        bool canMoveRight = true;
+
 
 
         public Racket(int _x1, int _y1, Keys _player_up_right, Keys _player_down_left, int _screenWidth, int _screenHeight)
@@ -47,63 +52,187 @@ namespace PONG
 
            
                 //check of racket binnen scherm is -- geldt ook voor onderstaande statements
-                if (_pos.Y <= height - 116)
+                if (_pos.Y < height - 114)
                 {
                     //check of er input is -- geldt ook voor onderstaande statements
-                    if (state.IsKeyDown(player_down_left))
+                    if (canMoveDown && state.IsKeyDown(player_down_left))
                     {
                         _pos.Y += 5;
+                        if(_pos.Y > height - 114)
+                        {
+                            _pos.Y = height - 114;
+                        }
                     }
                 }
 
-                if (_pos.Y >= height - height + 1)
+                if (_pos.Y > 0)
                 {
-                    if (state.IsKeyDown(player_up_right))
+                    if (canMoveUp && state.IsKeyDown(player_up_right))
                     {
                         _pos.Y -= 5;
+                        if(_pos.Y < 0)
+                        {
+                            _pos.Y = 0;
+                        }
                     }
                 }
+            }
+
+            if (richting == direction.horizontal)
+            {
+                if (_pos.X < width - batje2.Width)
+                {
+                    if (canMoveRight && state.IsKeyDown(player_up_right))
+                    {
+                        _pos.X += 5;
+                        if(_pos.X > width - batje2.Width)
+                        {
+                            _pos.X = width - batje2.Width;
+                        }
+                    }
+                }
+
+                if (_pos.X > 0)
+                {
+                    if (canMoveLeft && state.IsKeyDown(player_down_left))
+                    {
+                        _pos.X -= 5;
+                        if(_pos.X < 1)
+                        {
+                            _pos.X = 0;
+                        }
+                    }
+                }
+
+            }
         }
 
+        //check of rackets met zichzelf colliden en niet meer kunnen bewegen in bepaalde richting
+        public void internalIntersect(Racket self, Racket other)
+        {
+            if (self.richting == Racket.direction.horizontal)
+            {
+                if (other.richting == Racket.direction.vertical)
+                {
+                    if (self.boundingBoxHorizontaalBatje.Intersects(other.boundingBoxVerticaalBatje))
+                    {
+                        if (self._pos.X > other._pos.X)
+                        {
+                            self.canMoveLeft = false;
+                        }
+                        else if (self._pos.X < other._pos.X)
+                        {
+                            self.canMoveRight = false;
+                        }
+                        else if(self._pos.X == other._pos.X && self._pos.Y > other._pos.Y)
+                        {
+                            self.canMoveRight = true;
+                            self.canMoveLeft = false;
+                            other.canMoveDown = false;
+                            other.canMoveUp = true;
+                        } else if (self._pos.X == other._pos.X && self._pos.Y < other._pos.Y)
+                        {
+                            self.canMoveLeft = false;
+                            self.canMoveRight = true;
+                            other.canMoveUp = false;
+                            other.canMoveDown = true;
+                        }
+                    }
+                }
+            }
+            else if (self.richting == Racket.direction.vertical)
+            {
+                if (other.richting == Racket.direction.horizontal)
+                {
+                    if (self.boundingBoxVerticaalBatje.Intersects(other.boundingBoxHorizontaalBatje))
+                    {
+                        if (self._pos.Y < other._pos.Y)
+                        {
+                            self.canMoveDown = false;
+                        }
+                        else if (self._pos.Y > other._pos.Y)
+                        {
+                            self.canMoveUp = false;
+                        }
+                        else if (self._pos.Y == other._pos.Y && self._pos.X > other._pos.X)
+                        {
+                            self.canMoveDown = true;
+                            other.canMoveRight = false;
+                            other.canMoveLeft = true;
+                            self.canMoveUp = false;
+                        }
+                        else if (self._pos.Y == other._pos.Y && self._pos.X > other._pos.X)
+                        {
+                            self.canMoveDown = true;
+                            other.canMoveRight = true;
+                            other.canMoveLeft = false;
+                            self.canMoveUp = false;
+
+                        }
+                    }
+                }
+            }
+        }
+
+
         //bounding box voor de verticale rackets
-        public Rectangle boundingBoxVertical
+        public Rectangle boundingBoxHorizontaalBatje
         {
             get
             {
-                hitbox = _sprite.Bounds;
+                hitbox = batje2.Bounds;
+                hitbox.Offset(_pos);
+                return hitbox;
+            }
+        }
+        
+        //bounding box voor horizontale rackets
+        public Rectangle boundingBoxVerticaalBatje
+        {
+            get
+            {
+                hitbox = batje1.Bounds;
                 hitbox.Offset(_pos);
                 return hitbox;
             }
         }
 
-
-
         // laad de sprites -- geef ze een positie
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            _sprite = content.Load<Texture2D>("batje");
-            spriteOrigin = new Vector2(_sprite.Width / 2, _sprite.Height / 2);
+            batje1 = content.Load<Texture2D>("batje");
+            batje2 = content.Load<Texture2D>("batje2");
             _pos = new Vector2(x1, y1);
-            _pos = _pos - spriteOrigin;
         }
 
         //teken de sprites van de rackets
         public void Draw(SpriteBatch _spriteBatch)
         {
-                _spriteBatch.Draw(_sprite, _pos, Color.White);
-            
-
-
+            if (richting == direction.vertical)
+            {
+                _spriteBatch.Draw(batje1, _pos, Color.White);
+            }
+            else if (richting == direction.horizontal)
+            {
+                _spriteBatch.Draw(batje2, _pos, Color.White);
+            }
         }
 
         // check collision met de bal
-        public void intersectDetection(Rectangle bal)
+        public void intersectDetection(Rectangle balHitbox)
         {
-            if(boundingBoxVertical.Intersects(bal)) 
+            if (richting == direction.horizontal && boundingBoxHorizontaalBatje.Intersects(balHitbox))
             {
                 intersect = true;
             }
-            else if(!boundingBoxVertical.Intersects(bal))
+            else if(richting == direction.vertical && boundingBoxVerticaalBatje.Intersects(balHitbox)) 
+            {
+                intersect = true;
+            }
+            else if(!boundingBoxVerticaalBatje.Intersects(balHitbox) && !boundingBoxHorizontaalBatje.Intersects(balHitbox))
+            {
+                intersect = false;
+            } else
             {
                 intersect = false;
             }
