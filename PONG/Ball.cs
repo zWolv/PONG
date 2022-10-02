@@ -54,13 +54,13 @@ namespace PONG
             _location = new Vector2(x, y);
             _startLocation = new Vector2(x - 25, y - 25);
 
-            _velocity = new Vector2(rnd.Next(-3, 3), 0);
+            _velocity = new Vector2(1, 0);
             if(_velocity.X == 0)
             {
                 _velocity.X = 1;
             }
             _velocity.Y = maxVelocity - _velocity.X;
-            _startVelocity = new Vector2(rnd.Next(-3,3), 0);
+            _startVelocity = new Vector2(0, 0);
             if(_startVelocity.X == 0)
             {
                 _startVelocity.X = 1;

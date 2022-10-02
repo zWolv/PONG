@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using SharpDX.MediaFoundation;
 using System.Collections.Generic;
 namespace PONG
 {
