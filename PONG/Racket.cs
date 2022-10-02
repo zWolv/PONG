@@ -208,17 +208,11 @@ namespace PONG
         }
 
         // laad de sprites -- geef ze een positie
-        public void LoadContent(ContentManager content, GraphicsDevice device)
+        public void LoadContent(ContentManager content)
         {
             batje1 = content.Load<Texture2D>("batje");
             batje2 = content.Load<Texture2D>("batje2");
             _pos = new Vector2(x1, y1);
-        }
-
-        // update de rackets -- overbodig?
-        public void Update()
-        {
-            movement();
         }
 
         //teken de sprites van de rackets
@@ -232,8 +226,6 @@ namespace PONG
             {
                 _spriteBatch.Draw(batje2, _pos, Color.White);
             }
-
-
         }
 
         // check collision met de bal

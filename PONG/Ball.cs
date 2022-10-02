@@ -12,9 +12,6 @@ namespace PONG
         //positie
         float x;
         float y;
-        //snelheid
-        float speedX;
-        float speedY;
         //bal texture
         public Texture2D _kirbyBall;
         // corrigeren voor het linksboven tekenen
@@ -32,17 +29,15 @@ namespace PONG
         public int maxCorner;
         bool intersect;
         //random bounce
-        Random rnd = new Random();
+        public Random rnd = new Random();
         //wordt er met 2 of meer rackets gespeeld
         public bool tweeRackets = true;
 
-        public Ball(float _x, float _y, float _speedX, float _speedY)
+        public Ball(float _x, float _y)
         {
             //geef de waardes van het geïnstancieerde object mee aan de class
             x = _x;
             y = _y;
-            speedX = _speedX;
-            speedY = _speedY;
         }
 
         //hitbox voor collision
@@ -61,12 +56,23 @@ namespace PONG
         {
             _location = new Vector2(x, y);
             _startLocation = new Vector2(x - 25, y - 25);
-            _velocity = new Vector2(speedX, speedY);
-            _startVelocity = new Vector2(speedX, speedY);
+
+            _velocity = new Vector2(1, 0);
+            if (_velocity.X == 0)
+            {
+                _velocity.X = 1;
+            }
+            _velocity.Y = maxVelocity - _velocity.X;
+            _startVelocity = new Vector2(0, 0);
+            if (_startVelocity.X == 0)
+            {
+                _startVelocity.X = 1;
+            }
+            _startVelocity.Y = maxVelocity - _startVelocity.X;
         }
 
-        //neem de intersect bool van rackets over
-        public void intersectDetect(bool intersect)
+            //neem de intersect bool van rackets over
+            public void intersectDetect(bool intersect)
         {
             if (intersect)
             {

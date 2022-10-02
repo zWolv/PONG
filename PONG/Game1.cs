@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using SharpDX.MediaFoundation;
 using System.Collections.Generic;
 using System.Text;
 
@@ -81,7 +79,7 @@ namespace PONG
             vierPlayers.Add(new Racket((canvasHeight / 2) - 57, 0, Keys.Right, Keys.Left, Racket.direction.horizontal, canvasWidth, canvasHeight));
             vierPlayers.Add(new Racket((canvasHeight / 2) - 57, canvasHeight - 53, Keys.H, Keys.G, Racket.direction.horizontal, canvasWidth, canvasHeight));
             // bal toevoegen aan bijbehorende list
-            ballen.Add(new Ball(400, canvasHeight / 2, 0, 0));
+            ballen.Add(new Ball(400, canvasHeight / 2));
             //scoredisplay toevoegen aan bijbehorende list
             score2player.Add(new Score(100, canvasHeight / 2));
             score2player.Add(new Score(canvasWidth - 100, canvasHeight / 2));
@@ -118,7 +116,7 @@ namespace PONG
             //content voor tweespeler mode laden
             foreach (Racket p in tweePlayers)
             {
-                p.LoadContent(Content, GraphicsDevice);
+                p.LoadContent(Content);
             }
             //content voor ballen laden
             foreach (Ball b in ballen)
@@ -128,7 +126,7 @@ namespace PONG
             //content voor vierspeler mode laden
             foreach (Racket p in vierPlayers)
             {
-                p.LoadContent(Content, GraphicsDevice);
+                p.LoadContent(Content);
             }
             //content voor scores laden
             foreach (Score num in score2player)
@@ -190,7 +188,7 @@ namespace PONG
                     //positie van de rackets updaten
                     foreach (Racket p in tweePlayers)
                     {
-                        p.Update();
+                        p.movement();
                     }
 
                     //score per racket updaten als nodig is
@@ -249,7 +247,7 @@ namespace PONG
                     //positie van rackets updaten
                     foreach (Racket p in vierPlayers)
                     {
-                        p.Update();
+                        p.movement();
                     }
 
 
