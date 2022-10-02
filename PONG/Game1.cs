@@ -19,6 +19,7 @@ namespace PONG
         // knoppen op begin- en eindscherm
         public Buttons tweeSpelers;
         public Buttons speedUp;
+        public Buttons tweeBallen
         public Buttons gameOver;
         // list voor scoredisplay
         public List<Score> score = new List<Score>();
@@ -31,6 +32,7 @@ namespace PONG
             Menu,
             TweeSpelers,
             SpeedUp,
+            TweeBallen,
             GameOver,
         }
 
@@ -58,12 +60,14 @@ namespace PONG
             //de knoppen van de menus 
             tweeSpelers = new Buttons(335, 60, gameStates.TweeSpelers, "Standaard mode");
             speedUp = new Buttons(335, 210, gameStates.SpeedUp, "Speedup mode");
+            tweeBallen = new Buttons(335, 360, gameStates.TweeBallen, "Twee-ballen mode");
             gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             //twee rackets toevoegen aan bijbehorende list
             tweePlayers.Add(new Racket(26, 57, Keys.W, Keys.S, canvasWidth, canvasHeight));
             tweePlayers.Add(new Racket(973, 57, Keys.Up, Keys.Down, canvasWidth, canvasHeight));
             // bal toevoegen aan bijbehorende list
-            ballen.Add(new Ball(400, canvasHeight / 2));
+            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2));
+            ballen.Add(new Ball(canvasWidth / 2, canvasHeight / 2));
             //scoredisplay toevoegen aan bijbehorende list
             score.Add(new Score(100, canvasHeight / 2));
             score.Add(new Score(canvasWidth - 100, canvasHeight / 2));
@@ -88,6 +92,7 @@ namespace PONG
             //content voor knoppen laden
             tweeSpelers.LoadContent(Content);
             speedUp.LoadContent(Content);
+            tweeBallen.LoadContent(Content);
             gameOver.LoadContent(Content);
             //content voor tweespeler mode laden
             foreach (Racket p in tweePlayers)
@@ -161,7 +166,10 @@ namespace PONG
                     //score per racket updaten als nodig is
                     for(int i = 0;i < 2; i++)
                     {
-                        score[i].Update(ballen[0], canvasWidth, canvasHeight, tweePlayers[i], i, this);
+                        foreach (Ball b in ballen)
+                        {
+                            score[i].Update(b, canvasWidth, canvasHeight, tweePlayers[i], i, this);
+                        }
                     }
                     break;
                     // gamestate voor gameover scherm
