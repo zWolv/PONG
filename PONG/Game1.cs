@@ -77,7 +77,7 @@ namespace PONG
             speedUp = new Buttons(335, 330, gameStates.SpeedUp, "Speedup mode");
             gameOver = new Buttons(335, 150, gameStates.Menu, "Terug naar menu");
             //twee rackets toevoegen aan bijbehorende list
-            tweePlayers.Add(new Racket(0, 0, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
+            tweePlayers.Add(new Racket(0, (canvasHeight / 2) - 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
             tweePlayers.Add(new Racket(canvasWidth - 53, (canvasHeight / 2) - 57, Keys.Up, Keys.Down, Racket.direction.vertical, canvasWidth, canvasHeight));
             // vier rackets toevoegen aan bijbehorende list
             vierPlayers.Add(new Racket(0, (canvasHeight / 2) - 57, Keys.W, Keys.S, Racket.direction.vertical, canvasWidth, canvasHeight));
@@ -194,6 +194,7 @@ namespace PONG
                     //positie van bal updaten
                     foreach (Ball b in ballen)
                     {
+                        b.kantCollision(canvasHeight);
                         b.movement();
                     }
 
@@ -285,6 +286,7 @@ namespace PONG
                         score4player[i].Update(ballen[0], canvasWidth, canvasHeight, vierPlayers[i], i, this);
                     }
                     break;
+
                     // gamestate voor gameover scherm
                     case gameStates.GameOver:
                         gameOver.Update(this);

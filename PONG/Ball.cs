@@ -65,7 +65,7 @@ namespace PONG
                 _velocity.X = 1;
             }
             _velocity.Y = maxVelocity - _velocity.X;
-            _startVelocity = new Vector2(0, 0);
+            _startVelocity = new Vector2(rnd.Next(-5,5), 0);
             if (_startVelocity.X == 0)
             {
                 _startVelocity.X = 1;
@@ -150,15 +150,6 @@ namespace PONG
         //bounce de bal van het racket als er collision is
         public void verticalRacketCollision(int canvasWidth, int canvasHeight, Game1 game)
         {
-            //als er maar 2 rackets zijn, bounced de bal van de boven- en onderkant
-            if(tweeRackets)
-            {
-                if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
-                {
-                    _velocity.Y *= -1;
-                }
-            }
-
             //zie vierSpelers()
             if (this.intersect && _location.X <= 53)
             {
@@ -201,6 +192,18 @@ namespace PONG
 
             //update de positie van de bal
 
+        }
+
+        public void kantCollision(int canvasHeight)
+        {
+            //als er maar 2 rackets zijn, bounced de bal van de boven- en onderkant
+            if (tweeRackets)
+            {
+                if (_location.Y < 0 || _location.Y > canvasHeight - _kirbyBall.Height)
+                {
+                    _velocity.Y *= -1;
+                }
+            }
         }
 
 
